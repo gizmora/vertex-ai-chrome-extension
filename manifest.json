@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Extension Template",
+  "description": "Base Level Extension",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup/hello.html",
+    "default_icon": "images/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches":[
+        "<all_urls>"
+      ],
+      "js": ["scripts/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
