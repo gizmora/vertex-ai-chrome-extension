@@ -1,8 +1,17 @@
 <html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+  </head>
   <body>
-    <h1>VerifAI <span style="font-size: x-small;">powered by: Vertex AI</span></h1>
-    <button id="submit-prompt">Send Test Prompt </button>
-    <div id="prompt-response"></div>
+    <div class="main-container">
+      <h1>VerifAI <span style="font-size: x-small;">powered by: Vertex AI</span></h1>
+      <button id="submit-prompt">Send Test Prompt </button>
+      <div id="prompt-response">
+        <h3 class="fail-header">Failed:</h3>
+        <div id="reasons"></div>
+        <div id="suggestions"></div>
+      </div>
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>
