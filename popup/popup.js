@@ -28,3 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+
+$(document).ready(function(){
+  alert('popup: JQUERY works!');
+});
