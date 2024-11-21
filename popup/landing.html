@@ -5,12 +5,15 @@
   <body>
     <div class="main-container">
       <h1>VerifAI <span style="font-size: x-small;">powered by: Vertex AI</span></h1>
-      <button id="submit-prompt">Send Test Prompt </button>
+      <button id="submit-prompt">Run Diagnostics</button>
       <div id="prompt-response">
         <h3 class="fail-header">Failed:</h3>
         <div id="reasons"></div>
         <div id="suggestions"></div>
       </div>
+    </div>
+    <div>
+      <button id="close-btn">X</button>
     </div>
     <script src="../scripts/jquery-3.7.1.min.js"></script>
     <script src="popup.js"></script>
