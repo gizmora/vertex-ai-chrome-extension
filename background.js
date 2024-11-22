@@ -27,3 +27,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 });
+
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.windows.create({
+    url: "../popup/landing.html",
+    type: "popup",
+    width: 400,
+    height: 600
+  });
+});

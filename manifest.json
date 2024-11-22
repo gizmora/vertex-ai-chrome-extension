@@ -29,11 +29,10 @@
   "host_permissions":[
     "http://localhost:8888/*"
   ],
-  "action": {
-    "default_popup": "popup/landing.html",
-    "default_icon": "images/icon-128.png"
-  },
   "permissions": [
-    "storage"
-  ]
+    "storage",
+    "windows",
+    "activeTab"
+  ],
+  "action":{}
 }
