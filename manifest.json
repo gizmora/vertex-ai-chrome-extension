@@ -18,7 +18,12 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["scripts/jquery-3.7.1.min.js"],
+      "resources": [
+        "scripts/jquery-3.7.1.min.js",
+        "popup/landing.html",
+        "popup/styles.css",
+        "popup/popup.js"
+      ],
       "matches": ["<all_urls>"]
     }
   ],
@@ -32,7 +37,8 @@
   "permissions": [
     "storage",
     "windows",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "action":{}
 }

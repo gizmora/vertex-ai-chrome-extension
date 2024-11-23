@@ -19,8 +19,4 @@ $(document).ready(() => {
       }
     });
   });
-
-  $('#close-btn').click(() => {  
-    window.close();
-  });
 });

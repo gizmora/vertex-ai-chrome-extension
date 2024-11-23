@@ -28,12 +28,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+let sidebarVisible = false; 
 
 chrome.action.onClicked.addListener((tab) => {
-  chrome.windows.create({
-    url: "../popup/landing.html",
-    type: "popup",
-    width: 400,
-    height: 600
+  sidebarVisible = !sidebarVisible; // Toggle visibility
+
+  chrome.tabs.sendMessage(tab.id, { 
+    action: 'toggleSidebar', 
+    visible: sidebarVisible 
   });
 });
