@@ -9,10 +9,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 function toggleSidebar() {
   const sidebar = document.getElementById('chr-sidebar');
   if (sidebar) {
-    // Sidebar exists, toggle its visibility
     sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none'; 
   } else {
-    // Sidebar doesn't exist, create and add it
     const newSidebar = document.createElement('div');
     newSidebar.id = 'chr-sidebar';
 
@@ -21,13 +19,8 @@ function toggleSidebar() {
       .then(page => {
         newSidebar.innerHTML = page;
 
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = chrome.runtime.getURL('popup/styles.css');
-        injectScript(chrome.runtime.getURL('../popup/popup.js'),newSidebar);
-        newSidebar.appendChild(link);
-
         document.body.appendChild(newSidebar);
+        addSubmitPromptListener();
       })
       .catch(error => {
         console.error('Error loading sidebar:', error);
@@ -35,8 +28,28 @@ function toggleSidebar() {
   }
 }
 
-function injectScript(src, container) {
-  const script = document.createElement('script');
-  script.setAttribute('src', src);
-  container.appendChild(script);
+function addSubmitPromptListener() {
+  document.getElementById('submit-prompt').addEventListener('click', () => {
+    console.log('CLICKED');
+  
+    chrome.runtime.sendMessage({ action: 'generatePrompt' }, (response) => {
+      if (response.error) {
+        console.error('Error:', response.error);
+      } else {
+        const generatedText = response.data;
+        const reasonsDiv = document.getElementById('reasons');
+        document.getElementById('prompt-response').style.display = 'block'; 
+  
+        const ul = document.createElement('ul');
+        generatedText.failed.forEach((item) => {
+          const li = document.createElement('li');
+          li.textContent = item.reason;
+          ul.appendChild(li);
+        });
+  
+        reasonsDiv.innerHTML = ''
+        reasonsDiv.appendChild(ul);
+      }
+    });
+  });
 }

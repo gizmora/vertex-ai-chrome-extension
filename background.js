@@ -1,7 +1,7 @@
 console.log('This is your service worker that runs in background.');
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('This chrome ext powered by Vertex AI');
+  console.log(`From ${sender.tab}: ${sender.url}`);
 
   if (request.action === 'generatePrompt') {
     let url = 'http://localhost:8888/vertex-ai/generate-prompt';
