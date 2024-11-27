@@ -1,19 +1,25 @@
-div.main-container {
-  min-width: 300px;
-  min-height: 480px;
+div.__main-container {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: black;
 }
 
 #prompt-response {
   display: none;
 }
 
-div#chr-sidebar{
+div#chr-sidebar {
   position: fixed;
   top: 7px;
   right: 28px;
-  width: 300px;
+  width: 325px;
   height: 98vh;
   background-color: white;
   z-index: 2147483647;
   border: 1px solid #ccc;
+  padding: 10px;
+}
+
+#submit-prompt {
+ color: white;
+ border: none;
 }
