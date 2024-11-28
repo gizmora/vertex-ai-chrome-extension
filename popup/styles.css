@@ -3,6 +3,16 @@ div.__main-container {
   color: black;
 }
 
+div.__main-container .__heading {
+  font-size: 28px;
+  padding: 10px 12px 20px;
+  border-bottom: solid 1px #e0e0e0;
+}
+
+span.__xs {
+  font-size: x-small;
+}
+
 #prompt-response {
   display: none;
 }
@@ -19,7 +29,14 @@ div#chr-sidebar {
   padding: 10px;
 }
 
-#submit-prompt {
+div.__action-btn {
+  margin: 10px 0px;
+}
+
+.__action-btn button#submit-prompt {
  color: white;
  border: none;
+ background-color: black;
+ padding: 8px;
+ border-radius: 4px;
 }
