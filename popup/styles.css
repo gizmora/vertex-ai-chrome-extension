@@ -1,16 +1,17 @@
 div.__main-container {
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif !important;
   color: black;
 }
 
 div.__main-container .__heading {
-  font-size: 28px;
-  padding: 10px 12px 20px;
+  font-size: 16px !important;
+  font-weight: bold;
+  padding: 10px 12px 10px;
   border-bottom: solid 1px #e0e0e0;
 }
 
 span.__xs {
-  font-size: x-small;
+  font-size: x-small !important;
 }
 
 #prompt-response {
@@ -39,4 +40,6 @@ div.__action-btn {
  background-color: black;
  padding: 8px;
  border-radius: 4px;
+ display: flex;
+ align-items: center;
 }
