@@ -38,17 +38,24 @@ function addSubmitPromptListener() {
       } else {
         const generatedText = response.data;
         const reasonsDiv = document.getElementById('reasons');
+        const suggestionsDiv = document.getElementById('suggestions');
         document.getElementById('prompt-response').style.display = 'block'; 
   
         const ul = document.createElement('ul');
+        const ul2 = document.createElement('ul');
         generatedText.failed.forEach((item) => {
           const li = document.createElement('li');
+          const li2 = document.createElement('li');
+          li2.textContent = item.suggestion;
           li.textContent = item.reason;
           ul.appendChild(li);
+          ul2.appendChild(li2);
         });
   
-        reasonsDiv.innerHTML = ''
+        reasonsDiv.innerHTML = '';
         reasonsDiv.appendChild(ul);
+        suggestionsDiv.innerHTML = '';
+        suggestionsDiv.appendChild(ul2);
       }
     });
   });
