@@ -28,6 +28,7 @@ div#chr-sidebar {
   z-index: 2147483647;
   border: 1px solid #ccc;
   padding: 10px;
+  overflow-y: scroll;
 }
 
 div.__action-btn {
@@ -42,4 +43,8 @@ div.__action-btn {
  border-radius: 4px;
  display: flex;
  align-items: center;
+}
+
+div.reasons {
+  margin-bottom: 24px;
 }
