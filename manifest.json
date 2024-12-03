@@ -9,7 +9,7 @@
         "<all_urls>"
       ],
       "js": [
-        "scripts/content.js"
+        "scripts/shadow_dom.js"
       ],
       "run_at": "document_idle",
       "css": ["popup/styles.css"]
