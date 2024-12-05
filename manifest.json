@@ -19,7 +19,8 @@
     {
       "resources": [
         "popup/landing.html",
-        "popup/styles.css"
+        "popup/styles.css",
+        "images/icon-128.png"
       ],
       "matches": ["<all_urls>"]
     }
@@ -37,5 +38,9 @@
     "activeTab",
     "tabs"
   ],
-  "action":{}
+  "action":{
+    "default_icon": {
+      "128": "images/icon-128.png"
+    }
+  }
 }

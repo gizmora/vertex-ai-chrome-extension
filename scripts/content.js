@@ -1,7 +1,7 @@
 (() => {
   const SHADOW_DOM = {
     containerId: 'sherlock-ai',
-    _shadowRoot: null, // like this
+    _shadowRoot: null,
   
     init:  function () {
       let _self = this;
@@ -68,6 +68,7 @@
           _self.addSubmitListener();
   
           _self.setStyling();
+          _self.setHeaderIcon();
         });
       }
     },
@@ -133,11 +134,23 @@
       
     },
   
-    createListItem(item, type, parent) {
+    createListItem: function (item, type, parent) {
       let li = document.createElement('li');
   
       li.textContent = type === 'reason' ? item.reason : item.rule;
       parent.appendChild(li);
+    },
+
+    setHeaderIcon: function () {
+      let _self = this;
+      let iconPath = chrome.runtime.getURL('../images/icon-128.png');
+      let iconContainer = _self._shadowRoot.getElementById('sherlock-icon');
+
+      if (iconContainer) {
+        iconContainer.src = iconPath;
+      } else {
+        console.log('No header icon.');
+      }
     }
   }
   
