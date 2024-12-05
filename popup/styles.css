@@ -26,9 +26,8 @@ div#chr-sidebar {
   height: 98vh;
   background-color: white;
   z-index: 2147483647;
-  border: 1px solid #ccc;
-  padding: 10px;
-  overflow-y: scroll;
+  border: 1px #eeeff1 solid;
+  overflow-y: auto;
 }
 
 div.__action-btn {
@@ -47,4 +46,13 @@ div.__action-btn {
 
 div.reasons {
   margin-bottom: 24px;
+}
+
+div.header {
+  display: flex;
+  align-items: center;
+}
+
+img#sherlock-icon {
+  height: 20px;
 }
