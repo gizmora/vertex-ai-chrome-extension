@@ -8,6 +8,7 @@ div.__main-container .__heading {
   font-weight: bold;
   padding: 10px 12px 10px;
   border-bottom: solid 1px #e0e0e0;
+  transition: top 0.3s ease;
 }
 
 span.__xs {
@@ -55,4 +56,12 @@ div.header {
 
 img#sherlock-icon {
   height: 20px;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: aliceblue;
+  z-index: 100;
 }
