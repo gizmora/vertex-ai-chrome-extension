@@ -20,7 +20,7 @@
       "resources": [
         "popup/landing.html",
         "popup/styles.css",
-        "images/icon-128.png"
+        "assets/images/icon-128.png"
       ],
       "matches": ["<all_urls>"]
     }
@@ -40,7 +40,7 @@
   ],
   "action":{
     "default_icon": {
-      "128": "images/icon-128.png"
+      "128": "assets/images/icon-128.png"
     }
   }
 }
