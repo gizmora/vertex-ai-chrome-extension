@@ -1,17 +1,27 @@
-<div class="__main-container">
+<div class="wrapper">
   <div class="__heading sticky">
     <div class="header">
-      <img id="sherlock-icon">
-      <span>sherlock</span>
+      <div class="icon">
+        <img id="sherlock-icon">
+      </div>
+      <div class="icon-name">sherlock</div>
     </div>
   </div>
-  <div class="__action-btn">
-    <button id="submit-prompt">Run Diagnostics</button>
+  <div class="nav">
+    <div class="nav-btn active">Home</div>
+    <div class="nav-btn">Results</div>
+    <div class="nav-btn">Settings</div>
   </div>
-  <div id="prompt-response">
-    <h3 class="fail-header">Failed: <span id="failed-count"></span></h3>
-    <div id="reasons"></div>
-    <h3 class="fail-header">Passed: <span id="passed-count"></span></h3>
-    <div id="suggestions"></div>
+  <div class="main-container">
+    <textarea placeholder="Type case entry details here..." id="case-details"></textarea>
+    <div class="__action-btn">
+      <button id="submit-prompt">Run Diagnostics</button>
+    </div>
+    <div id="prompt-response">
+      <h3 class="fail-header">Failed: <span id="failed-count"></span></h3>
+      <div id="reasons"></div>
+      <h3 class="fail-header">Passed: <span id="passed-count"></span></h3>
+      <div id="suggestions"></div>
+    </div>
   </div>
 </div>

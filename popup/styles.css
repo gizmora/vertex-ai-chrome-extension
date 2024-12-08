@@ -1,12 +1,11 @@
-div.__main-container {
-  font-family: "Segoe UI", Arial, sans-serif !important;
+div.wrapper {
   color: black;
 }
 
-div.__main-container .__heading {
-  font-size: 16px !important;
+div.wrapper .__heading {
+  font-size: 14px !important;
   font-weight: bold;
-  padding: 10px 12px 10px;
+  padding: 16px 12px;
   border-bottom: solid 1px #e0e0e0;
   transition: top 0.3s ease;
 }
@@ -17,6 +16,8 @@ span.__xs {
 
 #prompt-response {
   display: none;
+  font-family: "Raleway", sans-serif;
+  font-weight: normal;
 }
 
 div#chr-sidebar {
@@ -27,12 +28,13 @@ div#chr-sidebar {
   height: 98vh;
   background-color: white;
   z-index: 2147483647;
-  border: 1px #eeeff1 solid;
   overflow-y: auto;
+  border: 1px solid #efefef;
 }
 
 div.__action-btn {
   margin: 10px 0px;
+  font-family: "Raleway", sans-serif;
 }
 
 .__action-btn button#submit-prompt {
@@ -55,13 +57,63 @@ div.header {
 }
 
 img#sherlock-icon {
-  height: 20px;
+  height: 25px;
+  display: block;
 }
 
 .sticky {
   position: sticky;
   top: 0;
-  width: 100%;
-  background: aliceblue;
+  background-color: rgb(239 239 239 / 50%);
   z-index: 100;
+}
+
+div.nav {
+  display: flex;
+  padding: 10px 12px;
+}
+
+div.nav .nav-btn {
+  background-color: #efefef;
+  padding: 3px 16px;
+  border-radius: 23px;
+  margin-right: 7px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+div.icon-name {
+  line-height: 14px;
+}
+
+div.icon {
+  margin-right: 6px;
+}
+
+div.main-container {
+  padding: 10px;
+}
+
+div.nav .nav-btn.active {
+  color: #efefef;
+  background-color: black;
+}
+
+textarea#case-details {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  background-color: #f8f8f8;
+  font-size: 11px;
+  resize: none;
+  color: black;
+}
+
+textarea#case-details:focus {
+  outline: none !important;
+  border: none;
+  border-bottom: 1px solid black;
 }
