@@ -90,9 +90,9 @@
   
       if (submitButton) {
         submitButton.addEventListener('click', () => {
-          console.log('clicked');
+          const caseDetails = _self._shadowRoot.getElementById('case-details').value;
     
-          _self.sendMessage({action: 'generatePrompt'}, (response) => {
+          _self.sendMessage({action: 'generatePrompt', prompt: caseDetails}, (response) => {
             if (response.error) {
               console.error(response.error);
             } else {
@@ -134,7 +134,7 @@
               suggestionsDiv.appendChild(suggestionList);
               skippedDiv.appendChild(skippedList);
             }
-          })
+          });
         })
       } else {
         console.error("Submit button not found in Shadow DOM");
