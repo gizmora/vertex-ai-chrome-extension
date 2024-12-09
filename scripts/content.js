@@ -91,50 +91,52 @@
       if (submitButton) {
         submitButton.addEventListener('click', () => {
           const caseDetails = _self._shadowRoot.getElementById('case-details').value;
+          
+          if (_self.preprocessInput(caseDetails)) {
+            _self.sendMessage({action: 'generatePrompt', prompt: caseDetails}, (response) => {
+              if (response.error) {
+                console.error(response.error);
+              } else {
+                const generatedText = response.data;
+                const reasonList = document.createElement('ul');
+                const reasonsDiv = _self._shadowRoot.getElementById('reasons');
+                const suggestionList = document.createElement('ul');
+                const suggestionsDiv = _self._shadowRoot.getElementById('suggestions');
+                const skippedList = document.createElement('ul');
+                const skippedDiv = _self._shadowRoot.getElementById('skipped');
+      
+                this._shadowRoot.getElementById('prompt-response').style.display = 'block';
     
-          _self.sendMessage({action: 'generatePrompt', prompt: caseDetails}, (response) => {
-            if (response.error) {
-              console.error(response.error);
-            } else {
-              const generatedText = response.data;
-              const reasonList = document.createElement('ul');
-              const reasonsDiv = _self._shadowRoot.getElementById('reasons');
-              const suggestionList = document.createElement('ul');
-              const suggestionsDiv = _self._shadowRoot.getElementById('suggestions');
-              const skippedList = document.createElement('ul');
-              const skippedDiv = _self._shadowRoot.getElementById('skipped');
+                let failedCtr = 0;
+                let passedCtr = 0;
+                let skippedCtr = 0;
+      
+                generatedText.rules.forEach((item) => {
+                  if (!item.checked) {
+                    this.createListItem(item, 'skipped', skippedList);
+                    skippedCtr++;
+                  } else if (item.passed) {
+                    this.createListItem(item, 'passed', suggestionList);
+                    passedCtr++;
+                  } else {
+                    this.createListItem(item, 'reason', reasonList);
+                    failedCtr++;
+                  }
+                });
     
-              this._shadowRoot.getElementById('prompt-response').style.display = 'block';
-  
-              let failedCtr = 0;
-              let passedCtr = 0;
-              let skippedCtr = 0;
-    
-              generatedText.rules.forEach((item) => {
-                if (!item.checked) {
-                  this.createListItem(item, 'skipped', skippedList);
-                  skippedCtr++;
-                } else if (item.passed) {
-                  this.createListItem(item, 'passed', suggestionList);
-                  passedCtr++;
-                } else {
-                  this.createListItem(item, 'reason', reasonList);
-                  failedCtr++;
-                }
-              });
-  
-              _self._shadowRoot.getElementById("failed-count").textContent = `(${failedCtr})`;
-              _self._shadowRoot.getElementById("passed-count").textContent = `(${passedCtr})`;
-              _self._shadowRoot.getElementById("skipped-count").textContent = `(${skippedCtr})`;
-    
-              reasonsDiv.innerHTML = '';
-              suggestionsDiv.innerHTML = '';
-    
-              reasonsDiv.appendChild(reasonList);
-              suggestionsDiv.appendChild(suggestionList);
-              skippedDiv.appendChild(skippedList);
-            }
-          });
+                _self._shadowRoot.getElementById("failed-count").textContent = `(${failedCtr})`;
+                _self._shadowRoot.getElementById("passed-count").textContent = `(${passedCtr})`;
+                _self._shadowRoot.getElementById("skipped-count").textContent = `(${skippedCtr})`;
+      
+                reasonsDiv.innerHTML = '';
+                suggestionsDiv.innerHTML = '';
+      
+                reasonsDiv.appendChild(reasonList);
+                suggestionsDiv.appendChild(suggestionList);
+                skippedDiv.appendChild(skippedList);
+              }
+            });
+          }
         })
       } else {
         console.error("Submit button not found in Shadow DOM");
@@ -162,8 +164,6 @@
     },
 
     injectFont: function(url) {
-      let _self = this;
-
       const preconnect1 = document.createElement('link');
       preconnect1.rel = 'preconnect';
       preconnect1.href = 'https://fonts.googleapis.com';
@@ -179,6 +179,22 @@
       link.rel = 'stylesheet';
       link.href = url;
       document.head.appendChild(link);
+    },
+
+    preprocessInput: function(text) {
+      let _self = this;
+      let msg = '';
+      let errorLabel = _self._shadowRoot.getElementById('error-label')
+
+      if ((text.split(/\s+/).length < 3) || !/\b(is|are|was|were|have|has|had|do|does|did|\w+ing)\b/i.test(text)) { // Less than 3 words
+        msg = 'Insufficient content for rule checking';
+      } else {
+        msg = '';
+      }
+      
+      errorLabel.textContent = msg;
+
+      return msg !== '' ? false : true;
     }
   }
   
