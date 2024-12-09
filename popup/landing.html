@@ -13,15 +13,21 @@
     <div class="nav-btn">Settings</div>
   </div>
   <div class="main-container">
-    <textarea placeholder="Type case entry details here..." id="case-details"></textarea>
+    <div class="case-input">
+      <div class="main-heading">Case Details</div>
+      <div class="subheading">Narrate case details here to identify points for correction</div>
+      <textarea placeholder="Ex: Email exchange between agent and customer" id="case-details"></textarea>
+    </div>
     <div class="__action-btn">
       <button id="submit-prompt">Run Diagnostics</button>
     </div>
     <div id="prompt-response">
-      <h3 class="fail-header">Failed: <span id="failed-count"></span></h3>
+      <h3 class="main-heading">Failed: <span id="failed-count"></span></h3>
       <div id="reasons"></div>
-      <h3 class="fail-header">Passed: <span id="passed-count"></span></h3>
+      <h3 class="main-heading">Passed: <span id="passed-count"></span></h3>
       <div id="suggestions"></div>
+      <h3 class="main-heading">Skipped: <span id="skipped-count"></span></h3>
+      <div id="skipped"></div>
     </div>
   </div>
 </div>

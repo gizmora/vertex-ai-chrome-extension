@@ -1,5 +1,7 @@
 div.wrapper {
   color: black;
+  font-family: 'Lato', sans-serif;
+  font-weight: normal;
 }
 
 div.wrapper .__heading {
@@ -8,6 +10,7 @@ div.wrapper .__heading {
   padding: 16px 12px;
   border-bottom: solid 1px #e0e0e0;
   transition: top 0.3s ease;
+  font-family: 'Montserrat', serif;
 }
 
 span.__xs {
@@ -16,7 +19,6 @@ span.__xs {
 
 #prompt-response {
   display: none;
-  font-family: "Raleway", sans-serif;
   font-weight: normal;
 }
 
@@ -34,7 +36,6 @@ div#chr-sidebar {
 
 div.__action-btn {
   margin: 10px 0px;
-  font-family: "Raleway", sans-serif;
 }
 
 .__action-btn button#submit-prompt {
@@ -45,6 +46,8 @@ div.__action-btn {
  border-radius: 4px;
  display: flex;
  align-items: center;
+ cursor: pointer;
+ font-size: 12px;
 }
 
 div.reasons {
@@ -101,7 +104,7 @@ div.nav .nav-btn.active {
 
 textarea#case-details {
   width: 100%;
-  height: 150px;
+  height: 300px;
   padding: 12px 20px;
   box-sizing: border-box;
   border: none;
@@ -115,5 +118,16 @@ textarea#case-details {
 textarea#case-details:focus {
   outline: none !important;
   border: none;
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid black;
+}
+
+.subheading {
+  font-size: 11px;
+  color: #888888;
+  margin-bottom: 12px;
+}
+
+.main-heading {
+  font-size: 16px;
+  font-weight: bold;
 }

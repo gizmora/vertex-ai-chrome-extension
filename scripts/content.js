@@ -62,12 +62,12 @@
   
         _self.fetchUrl('../popup/landing.html', (page) => {
           newSidebar.innerHTML = page;
-  
-          document.body.appendChild(newSidebar);
+          
+          _self.injectFont('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+          _self.setStyling();
+          _self._shadowRoot.appendChild(newSidebar);
           _self.addChild(newSidebar);
           _self.addSubmitListener();
-  
-          _self.setStyling();
           _self.setHeaderIcon();
         });
       }
@@ -101,14 +101,20 @@
               const reasonsDiv = _self._shadowRoot.getElementById('reasons');
               const suggestionList = document.createElement('ul');
               const suggestionsDiv = _self._shadowRoot.getElementById('suggestions');
+              const skippedList = document.createElement('ul');
+              const skippedDiv = _self._shadowRoot.getElementById('skipped');
     
               this._shadowRoot.getElementById('prompt-response').style.display = 'block';
   
               let failedCtr = 0;
               let passedCtr = 0;
+              let skippedCtr = 0;
     
               generatedText.rules.forEach((item) => {
-                if (item.passed) {
+                if (!item.checked) {
+                  this.createListItem(item, 'skipped', skippedList);
+                  skippedCtr++;
+                } else if (item.passed) {
                   this.createListItem(item, 'passed', suggestionList);
                   passedCtr++;
                 } else {
@@ -119,12 +125,14 @@
   
               _self._shadowRoot.getElementById("failed-count").textContent = `(${failedCtr})`;
               _self._shadowRoot.getElementById("passed-count").textContent = `(${passedCtr})`;
+              _self._shadowRoot.getElementById("skipped-count").textContent = `(${skippedCtr})`;
     
               reasonsDiv.innerHTML = '';
               suggestionsDiv.innerHTML = '';
     
               reasonsDiv.appendChild(reasonList);
               suggestionsDiv.appendChild(suggestionList);
+              skippedDiv.appendChild(skippedList);
             }
           })
         })
@@ -143,7 +151,7 @@
 
     setHeaderIcon: function () {
       let _self = this;
-      let iconPath = chrome.runtime.getURL('../images/icon-128.png');
+      let iconPath = chrome.runtime.getURL('../assets/images/icon-128.png');
       let iconContainer = _self._shadowRoot.getElementById('sherlock-icon');
 
       if (iconContainer) {
@@ -151,6 +159,26 @@
       } else {
         console.log('No header icon.');
       }
+    },
+
+    injectFont: function(url) {
+      let _self = this;
+
+      const preconnect1 = document.createElement('link');
+      preconnect1.rel = 'preconnect';
+      preconnect1.href = 'https://fonts.googleapis.com';
+      document.head.appendChild(preconnect1);
+
+      const preconnect2 = document.createElement('link');
+      preconnect2.rel = 'preconnect';
+      preconnect2.href = 'https://fonts.gstatic.com';
+      preconnect2.crossOrigin = 'anonymous'; // Note: crossorigin attribute is set here
+      document.head.appendChild(preconnect2);
+
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      document.head.appendChild(link);
     }
   }
   
