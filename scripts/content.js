@@ -91,8 +91,10 @@
       if (submitButton) {
         submitButton.addEventListener('click', () => {
           const caseDetails = _self._shadowRoot.getElementById('case-details').value;
-          
+
           if (_self.preprocessInput(caseDetails)) {
+            _self._shadowRoot.getElementById('error-label').textContent = '';
+
             _self.sendMessage({action: 'generatePrompt', prompt: caseDetails}, (response) => {
               if (response.error) {
                 console.error(response.error);
@@ -172,7 +174,7 @@
       const preconnect2 = document.createElement('link');
       preconnect2.rel = 'preconnect';
       preconnect2.href = 'https://fonts.gstatic.com';
-      preconnect2.crossOrigin = 'anonymous'; // Note: crossorigin attribute is set here
+      preconnect2.crossOrigin = 'anonymous';
       document.head.appendChild(preconnect2);
 
       const link = document.createElement('link');
@@ -186,7 +188,7 @@
       let msg = '';
       let errorLabel = _self._shadowRoot.getElementById('error-label')
 
-      if ((text.split(/\s+/).length < 3) || !/\b(is|are|was|were|have|has|had|do|does|did|\w+ing)\b/i.test(text)) { // Less than 3 words
+      if ((text.split(/\s+/).length < 3) || !/\b(is|are|was|were|have|has|had|do|does|did|\w+ing)\b/i.test(text)) {
         msg = 'Insufficient content for rule checking';
       } else {
         msg = '';
