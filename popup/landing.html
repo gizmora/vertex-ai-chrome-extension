@@ -8,27 +8,9 @@
     </div>
   </div>
   <div class="nav">
-    <div class="nav-btn active">Home</div>
-    <div class="nav-btn">Results</div>
-    <div class="nav-btn">Settings</div>
+    <div class="nav-btn active mat-raised-button" data-nav-btn-name="home">Home</div>
+    <div class="nav-btn mat-raised-button" data-nav-btn-name="results">Results</div>
+    <div class="nav-btn disabled mat-raised-button" data-nav-btn-name="settings">Settings</div>
   </div>
-  <div class="main-container">
-    <div class="case-input">
-      <div class="main-heading">Case Details</div>
-      <div class="subheading">Narrate case details here to identify points for correction</div>
-      <textarea placeholder="Ex: Email exchange between agent and customer" id="case-details"></textarea>
-      <div id="error-label"></div>
-    </div>
-    <div class="__action-btn">
-      <button id="submit-prompt">Run Diagnostics</button>
-    </div>
-    <div id="prompt-response">
-      <h3 class="main-heading">Failed: <span id="failed-count"></span></h3>
-      <div id="reasons"></div>
-      <h3 class="main-heading">Passed: <span id="passed-count"></span></h3>
-      <div id="suggestions"></div>
-      <h3 class="main-heading">Skipped: <span id="skipped-count"></span></h3>
-      <div id="skipped"></div>
-    </div>
-  </div>
+  <div class="main-container"></div>
 </div>

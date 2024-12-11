@@ -2,6 +2,27 @@
   const SHADOW_DOM = {
     containerId: 'sherlock-ai',
     _shadowRoot: null,
+    mainContainerSelector: '.main-container',
+    homeTemplate: 
+    `<div class="case-input">
+      <div class="main-heading">Case Details</div>
+      <div class="subheading">Narrate case details here to identify points for correction</div>
+      <textarea placeholder="Ex: Email exchange between agent and customer" id="case-details"></textarea>
+      <div id="error-label"></div>
+    </div>
+    <div class="__action-btn">
+      <button id="submit-prompt" class="mat-raised-button">Run Diagnostics</button>
+      <div id="spinner"></div>
+    </div>`,
+    resultsTemplate: 
+    `<div id="prompt-response">
+        <h3 class="main-heading">Failed: <span id="failed-count"></span></h3>
+        <div id="reasons"></div>
+        <h3 class="main-heading">Passed: <span id="passed-count"></span></h3>
+        <div id="suggestions"></div>
+        <h3 class="main-heading">Skipped: <span id="skipped-count"></span></h3>
+        <div id="skipped"></div>
+      </div>`,
   
     init:  function () {
       let _self = this;
@@ -55,7 +76,7 @@
       const sidebar = _self._shadowRoot.getElementById('chr-sidebar');
   
       if (sidebar) {
-        sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none'; 
+        sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
       } else {
         const newSidebar = document.createElement('div');
         newSidebar.id = 'chr-sidebar';
@@ -67,8 +88,10 @@
           _self.setStyling();
           _self._shadowRoot.appendChild(newSidebar);
           _self.addChild(newSidebar);
-          _self.addSubmitListener();
           _self.setHeaderIcon();
+          _self.addNavListener();
+          _self.loadContent('home');
+          _self.addSubmitListener();
         });
       }
     },
@@ -94,8 +117,10 @@
 
           if (_self.preprocessInput(caseDetails)) {
             _self._shadowRoot.getElementById('error-label').textContent = '';
+            _self.toggleLoader(true);
 
             _self.sendMessage({action: 'generatePrompt', prompt: caseDetails}, (response) => {
+              _self.toggleLoader(false);
               if (response.error) {
                 console.error(response.error);
               } else {
@@ -197,6 +222,63 @@
       errorLabel.textContent = msg;
 
       return msg !== '' ? false : true;
+    },
+
+    addNavListener: function () {
+      let _self = this;
+      const nav = _self._shadowRoot.querySelector('.nav');
+
+      console.log(nav);
+      nav.addEventListener('click', (event) => {
+        const buttonId = event.target.dataset.navBtnName;
+        console.log({buttonId});
+      
+        if (event.target.classList.contains('nav-btn')) { 
+          _self.loadContent(buttonId);
+        }
+      });
+    },
+
+    loadContent: function(page) {
+      let _self = this;
+      const mainContainer = _self._shadowRoot.querySelector(_self.mainContainerSelector);
+
+      const contentSections = mainContainer.querySelectorAll('.section-content');
+      contentSections.forEach(section => {
+        section.style.display = 'none';
+      });
+
+      let contentSection = mainContainer.querySelector(`#${page}-content`);
+      if (!contentSection) {
+        contentSection = document.createElement('div');
+        contentSection.id = `${page}-content`;
+        contentSection.classList.add('section-content');
+        mainContainer.appendChild(contentSection);
+
+        switch (page) {
+          case 'home':
+            contentSection.innerHTML = _self.homeTemplate;
+            break;
+          case 'results':
+            contentSection.innerHTML = _self.resultsTemplate;
+            break;
+          default:
+            contentSection.innerHTML = _self.homeTemplate;
+        }
+      }
+
+      contentSection.style.display = 'block';
+    },
+
+    toggleLoader: function(show) {
+      let _self = this;
+  
+      const loader = _self._shadowRoot.getElementById('spinner');
+  
+      if (loader) {
+        loader.style.display = show? 'inline-block' : 'none';
+      }
+
     }
   }
   
