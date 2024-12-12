@@ -265,11 +265,57 @@
       
       for (let i=0; i < _self.resultsData.length; i++) {
         const row = document.createElement('tr');
-        ['category', 'rule', 'passed'].forEach(key => {
-          const cell = document.createElement('td');
-          cell.textContent = _self.resultsData[i][key];
-          row.appendChild(cell);
-        });
+
+        const categoryCell = document.createElement('td');
+        const categoryDiv = document.createElement('div');
+        categoryDiv.textContent = _self.resultsData[i].category;
+        categoryCell.appendChild(categoryDiv);
+        row.appendChild(categoryCell);
+
+        const ruleCell = document.createElement('td');
+        const ruleDiv = document.createElement('div');
+        ruleDiv.textContent = _self.resultsData[i].rule;
+        ruleCell.appendChild(ruleDiv);
+
+        if (!_self.resultsData[i].passed) {
+          const img = document.createElement('img');
+          img.src = chrome.runtime.getURL('../assets/images/suggestion-24px.png');
+          img.alt = 'Suggestion';
+          img.classList.add('bulb');
+
+          const sherlockSpan = document.createElement('span');
+          sherlockSpan.textContent = 'SherlockAI suggests...';
+          sherlockSpan.classList.add('sherlock-says');
+
+          const suggestionHeader = document.createElement('div');
+          suggestionHeader.classList.add('sherlock-says-header');
+          suggestionHeader.appendChild(img);
+          suggestionHeader.appendChild(sherlockSpan);
+
+          const suggestionDiv = document.createElement('div');
+          suggestionDiv.classList.add('suggestion');
+          suggestionDiv.appendChild(suggestionHeader)
+
+          const suggestionText = document.createElement('div');
+          suggestionText.textContent = _self.resultsData[i].reason ? '"' + _self.resultsData[i].reason + '"' : '';
+          suggestionDiv.appendChild(suggestionText);
+          ruleCell.appendChild(suggestionDiv);
+        }
+
+        row.appendChild(ruleCell);
+
+        const passedCell = document.createElement('td');
+        const passedDiv = document.createElement('div');
+
+        const img = document.createElement('img');
+        img.src = _self.resultsData[i].passed ? chrome.runtime.getURL('../assets/images/passed-24px.png') : chrome.runtime.getURL('../assets/images/failed-24px.png'); // Set image based on passed status
+        img.alt = _self.resultsData[i].passed ? 'Passed' : 'Failed';
+        img.classList.add('status-icon');
+        passedDiv.appendChild(img);
+
+        passedCell.appendChild(passedDiv);
+        row.appendChild(passedCell);
+
         table.appendChild(row);
       }
 
