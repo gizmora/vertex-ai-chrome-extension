@@ -188,3 +188,7 @@ div#error-label {
     transform: rotate(360deg);
   }
 } 
+
+div#rules-table {
+  font-size: 11px;
+}

@@ -16,13 +16,9 @@
     </div>`,
     resultsTemplate: 
     `<div id="prompt-response">
-        <h3 class="main-heading">Failed: <span id="failed-count"></span></h3>
-        <div id="reasons"></div>
-        <h3 class="main-heading">Passed: <span id="passed-count"></span></h3>
-        <div id="suggestions"></div>
-        <h3 class="main-heading">Skipped: <span id="skipped-count"></span></h3>
-        <div id="skipped"></div>
-      </div>`,
+      <div id="rules-table"></div>
+    </div>`,
+    resultsData: [],
   
     init:  function () {
       let _self = this;
@@ -124,43 +120,15 @@
               if (response.error) {
                 console.error(response.error);
               } else {
+                _self.loadContent('results');
+                _self._shadowRoot.getElementById('prompt-response').style.display = 'block';
+
                 const generatedText = response.data;
-                const reasonList = document.createElement('ul');
-                const reasonsDiv = _self._shadowRoot.getElementById('reasons');
-                const suggestionList = document.createElement('ul');
-                const suggestionsDiv = _self._shadowRoot.getElementById('suggestions');
-                const skippedList = document.createElement('ul');
-                const skippedDiv = _self._shadowRoot.getElementById('skipped');
-      
-                this._shadowRoot.getElementById('prompt-response').style.display = 'block';
-    
-                let failedCtr = 0;
-                let passedCtr = 0;
-                let skippedCtr = 0;
-      
-                generatedText.rules.forEach((item) => {
-                  if (!item.checked) {
-                    this.createListItem(item, 'skipped', skippedList);
-                    skippedCtr++;
-                  } else if (item.passed) {
-                    this.createListItem(item, 'passed', suggestionList);
-                    passedCtr++;
-                  } else {
-                    this.createListItem(item, 'reason', reasonList);
-                    failedCtr++;
-                  }
-                });
-    
-                _self._shadowRoot.getElementById("failed-count").textContent = `(${failedCtr})`;
-                _self._shadowRoot.getElementById("passed-count").textContent = `(${passedCtr})`;
-                _self._shadowRoot.getElementById("skipped-count").textContent = `(${skippedCtr})`;
-      
-                reasonsDiv.innerHTML = '';
-                suggestionsDiv.innerHTML = '';
-      
-                reasonsDiv.appendChild(reasonList);
-                suggestionsDiv.appendChild(suggestionList);
-                skippedDiv.appendChild(skippedList);
+                const tableContainer = _self._shadowRoot.getElementById('rules-table');
+                const myTable = _self.createResultsTable(generatedText.rules);
+                
+                tableContainer.innerHTML = '';
+                tableContainer.appendChild(myTable); 
               }
             });
           }
@@ -231,7 +199,6 @@
       console.log(nav);
       nav.addEventListener('click', (event) => {
         const buttonId = event.target.dataset.navBtnName;
-        console.log({buttonId});
       
         if (event.target.classList.contains('nav-btn')) { 
           _self.loadContent(buttonId);
@@ -279,6 +246,34 @@
         loader.style.display = show? 'inline-block' : 'none';
       }
 
+    },
+
+    createResultsTable: function(rules) {
+      let _self = this;
+      _self.resultsData = rules;
+
+      const table = document.createElement('table');
+      const headerRow = document.createElement('tr');
+
+      ['Category', 'Rule', 'Status'].forEach(headerText => {
+        const header = document.createElement('th');
+        header.textContent = headerText;
+        headerRow.appendChild(header);
+      });
+
+      table.appendChild(headerRow);
+      
+      for (let i=0; i < _self.resultsData.length; i++) {
+        const row = document.createElement('tr');
+        ['category', 'rule', 'passed'].forEach(key => {
+          const cell = document.createElement('td');
+          cell.textContent = _self.resultsData[i][key];
+          row.appendChild(cell);
+        });
+        table.appendChild(row);
+      }
+
+      return table;
     }
   }
   
