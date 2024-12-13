@@ -227,7 +227,7 @@ img.bulb {
 span.sherlock-says {
   font-weight: bold;
   font-family: 'Montserrat', serif;
-  display: none;
+  font-size: 10px;
 }
 
 div.sherlock-says-header {

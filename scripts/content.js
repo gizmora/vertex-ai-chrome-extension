@@ -273,34 +273,27 @@
         row.appendChild(categoryCell);
 
         const ruleCell = document.createElement('td');
-        const ruleDiv = document.createElement('div');
-        ruleDiv.textContent = _self.resultsData[i].rule;
-        ruleCell.appendChild(ruleDiv);
+        let ruleTemplate = `<div>${_self.resultsData[i].rule}</div>`;
 
         if (!_self.resultsData[i].passed) {
-          const img = document.createElement('img');
-          img.src = chrome.runtime.getURL('../assets/images/suggestion-24px.png');
-          img.alt = 'Suggestion';
-          img.classList.add('bulb');
-
-          const sherlockSpan = document.createElement('span');
-          sherlockSpan.textContent = 'SherlockAI suggests...';
-          sherlockSpan.classList.add('sherlock-says');
-
-          const suggestionHeader = document.createElement('div');
-          suggestionHeader.classList.add('sherlock-says-header');
-          suggestionHeader.appendChild(img);
-          suggestionHeader.appendChild(sherlockSpan);
-
-          const suggestionDiv = document.createElement('div');
-          suggestionDiv.classList.add('suggestion');
-          suggestionDiv.appendChild(suggestionHeader)
-
-          const suggestionText = document.createElement('div');
-          suggestionText.textContent = _self.resultsData[i].reason ? '"' + _self.resultsData[i].reason + '"' : '';
-          suggestionDiv.appendChild(suggestionText);
-          ruleCell.appendChild(suggestionDiv);
+          ruleTemplate += `<div class="suggestion">
+            <div class="sherlock-says-header">
+              <img src="${chrome.runtime.getURL('../assets/images/warning-24px.png')}" alt="Suggestion" class="bulb">
+              <span class="sherlock-says">Why it failed?</span>
+            </div>
+            <div>${_self.resultsData[i].reason ? '"' + _self.resultsData[i].reason + '"' : ''}</div>
+          </div>
+          <div class="suggestion">
+            <div class="sherlock-says-header">
+              <img src="${chrome.runtime.getURL('../assets/images/suggestion-24px.png')}" alt="Suggestion" class="bulb">
+              <span class="sherlock-says">What to improve...</span>
+            </div>
+            <div>${_self.resultsData[i].suggestion ? '"' + _self.resultsData[i].suggestion + '"' : ''}</div>
+          </div>
+          `;
         }
+
+        ruleCell.innerHTML = ruleTemplate;
 
         row.appendChild(ruleCell);
 
