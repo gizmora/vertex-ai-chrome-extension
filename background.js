@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(`From ${sender.tab}: ${sender.url}`);
 
   if (request.action === 'generatePrompt') {
-    let url = 'http://localhost:8888/vertex-ai/generate-prompt';
+    let url = 'https://vertex-demo-service-851787392919.us-central1.run.app/vertex-ai/generate-prompt';
     const options = {
       method: 'POST',
       headers: {
