@@ -20,7 +20,11 @@
       "resources": [
         "popup/landing.html",
         "popup/styles.css",
-        "assets/images/icon-128.png"
+        "assets/images/icon-128.png",
+        "assets/images/passed-24px.png",
+        "assets/images/failed-24px.png",
+        "assets/images/suggestion-24px.png",
+        "assets/images/warning-24px.png"
       ],
       "matches": ["<all_urls>"]
     }
