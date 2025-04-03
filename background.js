@@ -22,7 +22,7 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 const sendPromptToVertexAI = function (prompt, cb) {
-  let url = 'http://localhost:8888/vertex-ai/generate-prompt';
+  let url = 'https://vertex-demo-service-851787392919.us-central1.run.app/vertex-ai/generate-prompt';
   const options = {
     method: 'POST',
     headers: {
@@ -50,3 +50,19 @@ const sendPromptToVertexAI = function (prompt, cb) {
     cb({error: error});
   });
 };
+
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  console.log('%c HELLO CLICK CASE LOG', 'background: #222; color: yellow;');
+  console.log(tabs);
+  chrome.tabs.sendMessage(tabs[0].id, { action: 'clickCaseLog' }, function (response) {
+
+    if (response) {
+      if (response.success) {
+        console.log('Button clicked successfully!');
+      } else {
+        console.error('Failed to click button:', response.error);
+      }
+    }
+
+  });
+});

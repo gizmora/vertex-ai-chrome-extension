@@ -28,7 +28,8 @@
       document.body.appendChild(mainDiv);
   
       _self._shadowRoot = mainDiv.attachShadow({ mode: 'open' });
-      _self.addMessageListener();   
+      _self.addMessageListener();
+      _self.clickCaseLog();
     },
   
     addMessageListener: function() {
@@ -313,6 +314,25 @@
       }
 
       return table;
+    },
+
+    clickCaseLog: function () {
+      let _self = this;
+      
+      chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+        if (request.action === 'clickCaseLog') {
+          const caseLogButton = document.querySelector('material-button[aria-label="Case log"]');
+          console.log(caseLogButton);
+          if (caseLogButton) {
+            caseLogButton.click();
+            console.log('HELLO');
+            sendResponse({ success: true });
+          } else {
+            console.log('no button');
+            sendResponse({ success: false, error: 'Button not found' });
+          }
+        }
+      });
     }
   }
   
