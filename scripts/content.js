@@ -30,7 +30,6 @@
   
       _self._shadowRoot = mainDiv.attachShadow({ mode: 'open' });
       _self.addMessageListener();
-      _self.clickCaseLog();
     },
   
     addMessageListener: function() {
@@ -90,7 +89,7 @@
           _self.addNavListener();
           _self.loadContent('home');
           _self.addSubmitListener();
-          _self.clickCaseLog();
+          _self.caseLogBtnListener();
         });
       }
     },
@@ -318,44 +317,25 @@
       return table;
     },
 
-    clickCaseLog: function () {
-      let _self = this;
-
-      console.log('SHERLOCK AI: CLICK CASE LOG')
-      
-      chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-        if (request.action === 'clickCaseLog') {
-          console.log('SHERLOCK AI: inside if')
-
-          document.addEventListener('DOMContentLoaded', function() {
-            const caseLogButton = document.querySelector('material-button[aria-label="Case log"]');
-            console.log('SHERLOCK AI: Click Case log')
-            console.log(caseLogButton);
-            if (caseLogButton) {
-              caseLogButton.click();
-              console.log('SHERLOCK AI: HELLO');
-              sendResponse({ success: true });
-            } else {
-              console.log('no button');
-              sendResponse({ success: false, error: 'Button not found' });
-            }
-          });
-        }
-      });
-    },
-
-    clickCaseLogs() {
+    caseLogBtnListener: function () {
       let _self = this;
       const caseLogsBtn = _self._shadowRoot.getElementById('case-logs');
   
       if (caseLogsBtn) {
         caseLogsBtn.addEventListener('click', () => {
-          _self.clickCaseLog();
+          const caseLogButton = document.querySelector('material-button[aria-label="Case log"]');
+          console.log('SHERLOCK AI: Click Case log')
+          console.log(caseLogButton);
+          if (caseLogButton) {
+            caseLogButton.click();
+            console.log('SHERLOCK AI: HELLO');
+          } else {
+            console.log('no button');
+          }
         })
       } else {
         console.error("Case logs button not found in Shadow DOM");
       }
-      
     },
   }
   

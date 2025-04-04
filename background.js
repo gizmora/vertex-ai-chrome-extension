@@ -50,20 +50,4 @@
       cb({error: error});
     });
   };
-
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    console.log('%c SHERLOCK AI: HELLO CLICK CASE LOG', 'background: #222; color: yellow;');
-    console.log(tabs);
-    chrome.tabs.sendMessage(tabs[0].id, { action: 'clickCaseLog' }, function (response) {
-
-      if (response) {
-        if (response.success) {
-          console.log('Button clicked successfully!');
-        } else {
-          console.error('Failed to click button:', response.error);
-        }
-      }
-
-    });
-  });
 })();
