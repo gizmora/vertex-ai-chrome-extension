@@ -3,6 +3,7 @@
     containerId: 'sherlock-ai',
     _shadowRoot: null,
     mainContainerSelector: '.main-container',
+    isThreadExpanded: false,
     homeTemplate: 
     `<div class="case-input">
       <div class="main-heading">Case Details</div>
@@ -316,7 +317,7 @@
 
       return table;
     },
-
+    // TODO: Fix multiple observer, observer should be only triggered once;
     caseLogBtnListener: function () {
       let _self = this;
       const caseLogsBtn = _self._shadowRoot.getElementById('case-logs');
@@ -327,8 +328,36 @@
           console.log('SHERLOCK AI: Click Case log')
           console.log(caseLogButton);
           if (caseLogButton) {
-            caseLogButton.click();
-            console.log('SHERLOCK AI: HELLO');
+            if (!_self.isThreadExpanded) {
+              caseLogButton.click();
+            }
+            console.log('Clicked Case Logs!');
+            const observer = new MutationObserver(mutationsList => {
+              console.log(_self.isThreadExpanded)
+              if (_self.isThreadExpanded) return;
+              for (const mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                  const caseLogs = document.querySelector('card[card-type="case-log"]');
+      
+                  if (caseLogs && caseLogs.classList.contains('focused')) {
+                    console.log('SHERLOCK AI: card2 is now focused. Expand all messages.');
+                    observer.disconnect();
+
+                    const expandThreadsButton = document.querySelector('material-button[debug-id="collapse-expand-all-button"]');
+                    console.log(expandThreadsButton);
+                    if (expandThreadsButton && !_self.isThreadExpanded) {
+                      expandThreadsButton.click();
+                      _self.isThreadExpanded = true;
+                      console.log('SHERLOCK AI: Expanded all messages. Prepare for scraping');
+                    }
+    
+                  }
+                }
+              }
+            });
+      
+            observer.observe(document.body, { attributes: true, subtree: true });
+      
           } else {
             console.log('no button');
           }
@@ -336,6 +365,7 @@
       } else {
         console.error("Case logs button not found in Shadow DOM");
       }
+      
     },
   }
   
