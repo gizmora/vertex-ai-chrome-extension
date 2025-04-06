@@ -3,7 +3,6 @@
     containerId: 'sherlock-ai',
     _shadowRoot: null,
     mainContainerSelector: '.main-container',
-    isThreadExpanded: false,
     homeTemplate: 
     `<div class="case-input">
       <div class="main-heading">Case Details</div>
@@ -21,6 +20,8 @@
       <div id="rules-table"></div>
     </div>`,
     resultsData: [],
+    isThreadExpanded: false,
+    caseLogsObserver: null,
   
     init:  function () {
       let _self = this;
@@ -325,16 +326,17 @@
       if (caseLogsBtn) {
         caseLogsBtn.addEventListener('click', () => {
           const caseLogButton = document.querySelector('material-button[aria-label="Case log"]');
-          console.log('SHERLOCK AI: Click Case log')
-          console.log(caseLogButton);
+
           if (caseLogButton) {
             if (!_self.isThreadExpanded) {
               caseLogButton.click();
             }
-            console.log('Clicked Case Logs!');
+            
             const observer = new MutationObserver(mutationsList => {
-              console.log(_self.isThreadExpanded)
-              if (_self.isThreadExpanded) return;
+              if (_self.isThreadExpanded) { 
+                return;
+              };
+
               for (const mutation of mutationsList) {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
                   const caseLogs = document.querySelector('card[card-type="case-log"]');
