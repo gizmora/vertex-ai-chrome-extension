@@ -318,7 +318,6 @@
 
       return table;
     },
-    // TODO: Fix multiple observer, observer should be only triggered once;
     caseLogBtnListener: function () {
       let _self = this;
       const caseLogsBtn = _self._shadowRoot.getElementById('case-logs');
@@ -330,35 +329,31 @@
           if (caseLogButton) {
             if (!_self.isThreadExpanded) {
               caseLogButton.click();
-            }
-            
-            const observer = new MutationObserver(mutationsList => {
-              if (_self.isThreadExpanded) { 
-                return;
-              };
 
-              for (const mutation of mutationsList) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                  const caseLogs = document.querySelector('card[card-type="case-log"]');
+              const observer = new MutationObserver(mutationsList => {
+                for (const mutation of mutationsList) {
+                  if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const caseLogs = document.querySelector('card[card-type="case-log"]');
+        
+                    if (caseLogs && caseLogs.classList.contains('focused')) {
+                      console.log('SHERLOCK AI: card2 is now focused. Expand all messages.');
+                      observer.disconnect();
+  
+                      const expandThreadsButton = document.querySelector('material-button[debug-id="collapse-expand-all-button"]');
+                      console.log(expandThreadsButton);
+                      if (expandThreadsButton && !_self.isThreadExpanded) {
+                        expandThreadsButton.click();
+                        _self.isThreadExpanded = true;
+                        console.log('SHERLOCK AI: Expanded all messages. Prepare for scraping');
+                      }
       
-                  if (caseLogs && caseLogs.classList.contains('focused')) {
-                    console.log('SHERLOCK AI: card2 is now focused. Expand all messages.');
-                    observer.disconnect();
-
-                    const expandThreadsButton = document.querySelector('material-button[debug-id="collapse-expand-all-button"]');
-                    console.log(expandThreadsButton);
-                    if (expandThreadsButton && !_self.isThreadExpanded) {
-                      expandThreadsButton.click();
-                      _self.isThreadExpanded = true;
-                      console.log('SHERLOCK AI: Expanded all messages. Prepare for scraping');
                     }
-    
                   }
                 }
-              }
-            });
-      
-            observer.observe(document.body, { attributes: true, subtree: true });
+              });
+        
+              observer.observe(document.body, { attributes: true, subtree: true });
+            }
       
           } else {
             console.log('no button');
