@@ -25,6 +25,8 @@
     contactUsFormSelector: 'div.first-message.expanded',
     caseDetailsSelector: 'div.issue-details-container',
     sourceSelector: 'issue-detail-row[debugid="sourceRow"] span[debugid="issue-detail-row-value"',
+    formLabelSelector: '.form-label',
+    formValueSelector: '[debug-id="html-value"]',
 
   
     init:  function () {
@@ -357,6 +359,8 @@
               });
         
               observer.observe(document.body, { attributes: true, subtree: true });
+            } else {
+              _self.extractCaseDetails();
             }
       
           } else {
@@ -370,7 +374,29 @@
     },
     extractCaseDetails: function () {
       let _self = this;
+      const data = [];
+      const contactUsForm = document.querySelector(_self.contactUsFormSelector);
+      const formLabels = contactUsForm.querySelectorAll(_self.formLabelSelector);
+
+      formLabels.forEach(formLabelElement => {
+        const labelText = formLabelElement.textContent.trim();
+        let valueText = null;
+
+        const valueWrapper = formLabelElement.nextElementSibling;
+
+        if (valueWrapper) {
+          const fieldValue = valueWrapper.querySelector(_self.formValueSelector);
+
+          if (fieldValue) {
+            valueText = fieldValue.textContent.trim();
+          }
+        
+        }
+
+        data.push({ label: labelText, value: valueText });
+      });
       
+      console.log({data});
     }
   }
   
