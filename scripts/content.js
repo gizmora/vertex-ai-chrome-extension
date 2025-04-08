@@ -22,6 +22,10 @@
     resultsData: [],
     isThreadExpanded: false,
     caseLogsObserver: null,
+    contactUsFormSelector: 'div.first-message.expanded',
+    caseDetailsSelector: 'div.issue-details-container',
+    sourceSelector: 'issue-detail-row[debugid="sourceRow"] span[debugid="issue-detail-row-value"',
+
   
     init:  function () {
       let _self = this;
@@ -364,6 +368,10 @@
       }
       
     },
+    extractCaseDetails: function () {
+      let _self = this;
+      
+    }
   }
   
   SHADOW_DOM.init();
