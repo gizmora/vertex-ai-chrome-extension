@@ -27,6 +27,9 @@
     sourceSelector: 'issue-detail-row[debugid="sourceRow"] span[debugid="issue-detail-row-value"',
     formLabelSelector: '.form-label',
     formValueSelector: '[debug-id="html-value"]',
+    contactUsForm: [],
+    timeline: [],
+    caseId: '',
 
   
     init:  function () {
@@ -38,6 +41,7 @@
   
       _self._shadowRoot = mainDiv.attachShadow({ mode: 'open' });
       _self.addMessageListener();
+      window.addEventListener('hashchange', _self.routeChangeHandler);
     },
   
     addMessageListener: function() {
@@ -393,10 +397,51 @@
         
         }
 
-        data.push({ label: labelText, value: valueText });
+        _self.contactUsForm.push({ label: labelText, value: valueText });
       });
       
-      console.log({data});
+      console.log(_self.contactUsForm);
+    },
+
+    routeChangeHandler: function () {
+      let _self = this;
+
+      _self.resetState();
+      console.log('SHERLOCK AI: Hash changed!', window.location.hash);
+      const hashUrl = window.location.hash;
+
+      if (!hashUrl) {
+        return null;
+      }
+    
+      const pathPart = hashUrl.substring(1);
+    
+      if (!pathPart.startsWith('/case/')) {
+        return null;
+      }
+    
+      _self.caseId = pathPart.substring('/case/'.length).trim();
+
+      console.log(`SHERLOCK AI: Case ID is ${_self.caseId}`);
+    },
+
+    resetState: function () {
+      console.log('SHERLOCK AI: Resetting case state.');
+
+      _self.contactUsForm = [];
+      _self.timeline = [];
+      _self.caseId = '';
+    },
+
+    buildCaseSummaryTemplate: function () {
+      let _self = this;
+      let caseDetails = _self.contactUsForm.map((field) => {
+        return `<p>${field.label}: ${field.value}</p>`
+      }).join('');
+      let summaryTemplate = `<section>
+        <h2>CASE <span>${_self.caseId}</span></h2>
+        ${caseDetails}
+      </section>`;
     }
   }
   
