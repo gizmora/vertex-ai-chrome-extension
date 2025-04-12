@@ -1,28 +1,9 @@
 (() => {
-  console.log('This is your service worker that runs in background.');
-
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log(`From ${sender.tab}: ${sender.url}`);
-
-    if (request.action === 'generatePrompt' && request.prompt) {
-      sendPromptToVertexAI(request.prompt, sendResponse);
-      return true;
-    }
-  });
-
-  let sidebarVisible = false; 
-
-  chrome.action.onClicked.addListener((tab) => {
-    sidebarVisible = !sidebarVisible; // Toggle visibility
-
-    chrome.tabs.sendMessage(tab.id, { 
-      action: 'toggleSidebar', 
-      visible: sidebarVisible 
-    });
-  });
+  let sidebarVisible = false;
+  const DEBUG = true;
 
   const sendPromptToVertexAI = function (prompt, cb) {
-    let url = 'https://vertex-demo-service-851787392919.us-central1.run.app/vertex-ai/generate-prompt';
+    let url = DEBUG ? 'http://localhost:8080/vertex-ai/generate-prompt' : 'https://vertex-demo-service-851787392919.us-central1.run.app/vertex-ai/generate-prompt';
     const options = {
       method: 'POST',
       headers: {
@@ -50,4 +31,24 @@
       cb({error: error});
     });
   };
+
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    console.log(`From ${sender.tab}: ${sender.url}`);
+
+    if (request.action === 'generatePrompt' && request.prompt) {
+      sendPromptToVertexAI(request.prompt, sendResponse);
+      return true;
+    }
+  });
+
+  chrome.action.onClicked.addListener((tab) => {
+    sidebarVisible = !sidebarVisible; // Toggle visibility
+
+    chrome.tabs.sendMessage(tab.id, { 
+      action: 'toggleSidebar', 
+      visible: sidebarVisible 
+    });
+  });
+
+  console.log('This is your service worker that runs in background.');
 })();
