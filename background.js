@@ -3,7 +3,7 @@
   const DEBUG = false;
 
   const sendPromptToVertexAI = function (prompt, cb) {
-    let url = DEBUG ? 'http://localhost:8080/vertex-ai/generate-prompt' : 'https://sherlock-ai-service-189965926617.us-central1.run.app/vertex-ai/generate-prompt';
+    let url = DEBUG ? 'http://localhost:8080/vertex-ai/generate-prompt' : 'https://sherlock-demo-851787392919.us-central1.run.app/api/v1/prompt/default';
     const options = {
       method: 'POST',
       headers: {
