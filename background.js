@@ -25,7 +25,12 @@
       console.log('Vertex AI response: ')
       console.log(data);
 
-      cb({data: data.promptResponse})
+      if (data.result) {
+        cb({data: data.result})
+      } else {
+        cb({data: []})
+      }
+
     }).catch((error) => {
       console.error(error);
       cb({error: error});
