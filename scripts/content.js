@@ -211,7 +211,6 @@
       let _self = this;
       const nav = _self._shadowRoot.querySelector('.nav');
 
-      console.log(nav);
       nav.addEventListener('click', (event) => {
         const buttonId = event.target.dataset.navBtnName;
       
@@ -347,15 +346,13 @@
                     const caseLogs = document.querySelector('card[card-type="case-log"]');
         
                     if (caseLogs && caseLogs.classList.contains('focused')) {
-                      console.log('SHERLOCK AI: card2 is now focused. Expand all messages.');
                       observer.disconnect();
   
                       const expandThreadsButton = document.querySelector('material-button[debug-id="collapse-expand-all-button"]');
-                      console.log(expandThreadsButton);
+
                       if (expandThreadsButton && !_self.isThreadExpanded) {
                         expandThreadsButton.click();
                         _self.isThreadExpanded = true;
-                        console.log('SHERLOCK AI: Expanded all messages. Prepare for scraping');
                       }
       
                     }
@@ -405,8 +402,6 @@
     },
 
     resetState: function () {
-      console.log('SHERLOCK AI: Resetting case state.');
-
       this.contactUsForm = [];
       this.timeline = [];
       this.caseId = '';

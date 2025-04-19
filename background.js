@@ -22,8 +22,6 @@
     fetch(url, options)
     .then((res) => res.json())
     .then((data) => {
-      console.log('Vertex AI response: ')
-      console.log(data);
 
       if (data.result) {
         cb({data: data.result})
@@ -47,7 +45,7 @@
   });
 
   chrome.action.onClicked.addListener((tab) => {
-    sidebarVisible = !sidebarVisible; // Toggle visibility
+    sidebarVisible = !sidebarVisible;
 
     chrome.tabs.sendMessage(tab.id, { 
       action: 'toggleSidebar', 
