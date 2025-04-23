@@ -328,6 +328,7 @@
 
       return table;
     },
+
     caseLogBtnListener: function () {
       let _self = this;
       const caseLogsBtn = _self._shadowRoot.getElementById('case-logs');
@@ -374,6 +375,7 @@
       }
       
     },
+    
     extractCaseDetails: function () {
       let _self = this;
       const data = [];
