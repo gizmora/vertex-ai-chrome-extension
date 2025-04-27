@@ -1,4 +1,10 @@
 const CASE_SCRAPER = {
+  contactUsFormSelector: 'div.first-message.expanded',
+  caseDetailsSelector: 'div.issue-details-container',
+  sourceSelector: 'issue-detail-row[debugid="sourceRow"] span[debugid="issue-detail-row-value"',
+  formLabelSelector: '.form-label',
+  formValueSelector: '[debug-id="html-value"]',
+
   setCaseLogBtnListener: function(_shadowRoot, extensionState) {
     let _self = this;
     const extractCaseLogsBtn = _shadowRoot.getElementById('case-logs');
@@ -24,7 +30,7 @@ const CASE_SCRAPER = {
     if (!extensionState.isThreadExpanded) {
       this.expandCaseLogsThread(extensionState);
     } else {
-      this.extractCaseDetails();
+      this.extractCaseDetails(extensionState);
     }
   },
 
@@ -57,7 +63,30 @@ const CASE_SCRAPER = {
   },
 
   extractCaseDetails: function() {
+    let _self = this;
+    const data = [];
+    const contactUsForm = document.querySelector(_self.contactUsFormSelector);
+    const formLabels = contactUsForm.querySelectorAll(_self.formLabelSelector);
 
+    formLabels.forEach(formLabelElement => {
+      const labelText = formLabelElement.textContent.trim();
+      let valueText = null;
+
+      const valueWrapper = formLabelElement.nextElementSibling;
+
+      if (valueWrapper) {
+        const fieldValue = valueWrapper.querySelector(_self.formValueSelector);
+
+        if (fieldValue) {
+          valueText = fieldValue.textContent.trim();
+        }
+      
+      }
+
+      extensionState.contactUsForm.push({ label: labelText, value: valueText });
+    });
+    
+    console.log(extensionState.contactUsForm);
   }
 
 }

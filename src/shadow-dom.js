@@ -1,4 +1,5 @@
-import UTILS from "./utils";
+import CASE_SCRAPER from "./case-scraper.js";
+import UTILS from "./utils.js";
 
 const SHADOW_DOM = {
   id: 'sherlock-ai',
@@ -35,15 +36,13 @@ const SHADOW_DOM = {
     document.body.appendChild(sherlock);
 
     this._shadowRoot = sherlock.attachShadow({ mode: 'open' });
-    this.setMessageListener();
-    // route change listner
   },
 
-  setMessageListener: function () {
+  setMessageListener: function (extensionState) {
     let _self = this;
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.action === 'toggleSidebar') {
-        _self.setSidebar();
+        _self.setSidebar(extensionState);
       }
     });
   },
@@ -67,6 +66,7 @@ const SHADOW_DOM = {
       _self.setNavListener();
       _self.loadContent('home');
       _self.setSubmitListener();
+      CASE_SCRAPER.setCaseLogBtnListener(_self._shadowRoot, extensionState);
     }
   },
 
