@@ -9,6 +9,9 @@
         "<all_urls>"
       ],
       "js": [
+        "src/utils.js",
+        "src/case-scraper.js",
+        "src/shadow-dom.js",
         "scripts/content.js"
       ],
       "run_at": "document_idle",

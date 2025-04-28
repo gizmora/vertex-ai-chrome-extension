@@ -11,7 +11,7 @@ const UTILS = {
     });
   },
 
-  fetchUrl: async function (url) {
+  fetchAsync: async function (url) {
     try {
       const response = await fetch(chrome.runtime.getURL(url));
       if (!response.ok) {
@@ -46,5 +46,3 @@ const UTILS = {
 
 
 }
-
-export default UTILS;

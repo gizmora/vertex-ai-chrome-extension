@@ -14,7 +14,7 @@ const CASE_SCRAPER = {
       return;
     }
 
-    caseLogsBtn.addEventListener('click', () => {
+    extractCaseLogsBtn.addEventListener('click', () => {
       _self.handleCaseLogButtonClick(extensionState);
     });
   },
@@ -62,7 +62,7 @@ const CASE_SCRAPER = {
     observer.observe(document.body, { attributes: true, subtree: true });
   },
 
-  extractCaseDetails: function() {
+  extractCaseDetails: function(extensionState) {
     let _self = this;
     const data = [];
     const contactUsForm = document.querySelector(_self.contactUsFormSelector);
@@ -90,5 +90,3 @@ const CASE_SCRAPER = {
   }
 
 }
-
-export default CASE_SCRAPER;

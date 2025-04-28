@@ -1,5 +1,3 @@
-import SHADOW_DOM from './src/shadow-dom.js';
-
 (() => {
   const CASE_STATE = {
     caseId: '',
@@ -33,9 +31,9 @@ import SHADOW_DOM from './src/shadow-dom.js';
       return null;
     }
   
-    this.CASE_STATE.caseId = pathPart.substring('/case/'.length).trim();
+    CASE_STATE.caseId = pathPart.substring('/case/'.length).trim();
 
-    console.log(`SHERLOCK AI: Case ID is ${this.caseId}`);
+    console.log(`SHERLOCK AI: Case ID is ${CASE_STATE.caseId}`);
   });
 
 })();

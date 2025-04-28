@@ -1,6 +1,3 @@
-import CASE_SCRAPER from "./case-scraper.js";
-import UTILS from "./utils.js";
-
 const SHADOW_DOM = {
   id: 'sherlock-ai',
   _shadowRoot: null,
@@ -20,6 +17,7 @@ const SHADOW_DOM = {
       <div id="rules-table"></div>
     </div>`,
   },
+  mainContainerSelector: '.main-container',
 
   createDiv: function (id = '') {
     let div = document.createElement('div');
@@ -47,7 +45,7 @@ const SHADOW_DOM = {
     });
   },
 
-  setSidebar: async function () {
+  setSidebar: async function (extensionState) {
     let _self = this;
     const sidebar = _self._shadowRoot.getElementById('chr-sidebar');
 
@@ -55,7 +53,7 @@ const SHADOW_DOM = {
       sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
     } else {
       const newSidebar = _self.createDiv('chr-sidebar');
-      const page = await UTILS.fetchUrl('../popup/landing.html');
+      const page = await UTILS.fetchAsync('../popup/landing.html');
 
       newSidebar.innerHTML = page;
 
@@ -73,16 +71,16 @@ const SHADOW_DOM = {
   setStyling: async function() {
     let _self = this;
 
-    const css = await UTILS.fetchUrl('../popup/styles.css');
+    const css = await UTILS.fetchAsync('../popup/styles.css');
     const styledEl = document.createElement('style');
     styledEl.textContent = css;
 
-    _self.addChild(styleEl);
+    _self.addChild(styledEl);
   },
 
   setHeaderIcon: async function () {
     let _self = this;
-    let iconPath = await fetchUrl('../assets/images/icon-128.png');
+    let iconPath = chrome.runtime.getURL('../assets/images/icon-128.png');
     let iconContainer = _self._shadowRoot.getElementById('sherlock-icon');
 
     if (iconContainer) {
@@ -198,5 +196,3 @@ const SHADOW_DOM = {
   }
 
 }
-
-export default SHADOW_DOM;
