@@ -43,6 +43,4 @@ const UTILS = {
   preprocessPrompt: function (text) {
     return (text.split(/\s+/).length < 3) || !/\b(is|are|was|were|have|has|had|do|does|did|\w+ing)\b/i.test(text);
   }
-
-
 }
