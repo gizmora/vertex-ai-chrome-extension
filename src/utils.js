@@ -40,7 +40,7 @@ const UTILS = {
     const style = this.createLinkElement('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap', 'stylesheet');
   },
 
-  preprocessPrompt: function (text) {
-    return (text.split(/\s+/).length < 3) || !/\b(is|are|was|were|have|has|had|do|does|did|\w+ing)\b/i.test(text);
+  checkInputValidity: function (text) {
+    return !((text.split(/\s+/).length < 3) || !/\b(is|are|was|were|have|has|had|do|does|did|\w+ing)\b/i.test(text));
   }
 }

@@ -131,7 +131,7 @@ const SHADOW_DOM = {
     if (submitButton) {
       submitButton.addEventListener('click', async () => {
         const caseDetails = _self._shadowRoot.getElementById('case-details').value;
-        const isValidInput = UTILS.preprocessPrompt(caseDetails);
+        const isValidInput = UTILS.checkInputValidity(caseDetails);
 
         if (isValidInput) {
           _self.setErrorMsg('');
