@@ -37,17 +37,23 @@
     "type": "module"
   },
   "host_permissions":[
-    "http://localhost:8888/*"
+    "http://localhost:8888/*",
+    "https://sherlock-ai-service-189965926617.us-central1.run.app/api/v1/prompt/default"
   ],
   "permissions": [
     "storage",
     "windows",
     "activeTab",
-    "tabs"
+    "tabs",
+    "identity"
   ],
   "action":{
     "default_icon": {
       "128": "assets/images/icon-128.png"
     }
+  },
+  "oauth2": {
+    "client_id": "189965926617-0q0hu88kporp7fe0iuo2g0210p3qh7lk.apps.googleusercontent.com",
+    "scopes":["openid", "email"]
   }
 }
