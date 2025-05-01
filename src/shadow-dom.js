@@ -140,8 +140,8 @@ const SHADOW_DOM = {
           const results = await UTILS.sendMessage({action: 'generatePrompt', prompt: caseDetails});
           _self.toggleLoader(false);
 
-          if (response.error) {
-            console.error(response.error);
+          if (results.error) {
+            console.error(results.error);
             return;
           }
 
@@ -154,8 +154,8 @@ const SHADOW_DOM = {
           
           const tableContainer = _self._shadowRoot.getElementById('rules-table');
 
-          if (tableContainer && response.data) {
-            const generatedText = response.data;
+          if (tableContainer && results.data) {
+            const generatedText = results.data;
             const myTable = _self.createResultsTable(generatedText.rules);
             tableContainer.innerHTML = '';
             tableContainer.appendChild(myTable); 
@@ -193,6 +193,73 @@ const SHADOW_DOM = {
     if (loader) {
       loader.style.display = show? 'inline-block' : 'none';
     }
+  },
+
+  createResultsTable: function(rules) {
+    let _self = this;
+    _self.resultsData = rules;
+
+    const table = document.createElement('table');
+    const headerRow = document.createElement('tr');
+
+    ['Category', 'Rule', 'Status'].forEach(headerText => {
+      const header = document.createElement('th');
+      header.textContent = headerText;
+      headerRow.appendChild(header);
+    });
+
+    table.appendChild(headerRow);
+    
+    for (let i=0; i < _self.resultsData.length; i++) {
+      const row = document.createElement('tr');
+
+      const categoryCell = document.createElement('td');
+      const categoryDiv = document.createElement('div');
+      categoryDiv.textContent = _self.resultsData[i].category;
+      categoryCell.appendChild(categoryDiv);
+      row.appendChild(categoryCell);
+
+      const ruleCell = document.createElement('td');
+      let ruleTemplate = `<div>${_self.resultsData[i].rule}</div>`;
+
+      if (!_self.resultsData[i].passed) {
+        ruleTemplate += `<div class="suggestion">
+          <div class="sherlock-says-header">
+            <img src="${chrome.runtime.getURL('../assets/images/warning-24px.png')}" alt="Suggestion" class="bulb">
+            <span class="sherlock-says">Why it failed?</span>
+          </div>
+          <div>${_self.resultsData[i].reason ? '"' + _self.resultsData[i].reason + '"' : ''}</div>
+        </div>
+        <div class="suggestion">
+          <div class="sherlock-says-header">
+            <img src="${chrome.runtime.getURL('../assets/images/suggestion-24px.png')}" alt="Suggestion" class="bulb">
+            <span class="sherlock-says">What to improve...</span>
+          </div>
+          <div>${_self.resultsData[i].suggestion ? '"' + _self.resultsData[i].suggestion + '"' : ''}</div>
+        </div>
+        `;
+      }
+
+      ruleCell.innerHTML = ruleTemplate;
+
+      row.appendChild(ruleCell);
+
+      const passedCell = document.createElement('td');
+      const passedDiv = document.createElement('div');
+
+      const img = document.createElement('img');
+      img.src = _self.resultsData[i].passed ? chrome.runtime.getURL('../assets/images/passed-24px.png') : chrome.runtime.getURL('../assets/images/failed-24px.png'); // Set image based on passed status
+      img.alt = _self.resultsData[i].passed ? 'Passed' : 'Failed';
+      img.classList.add('status-icon');
+      passedDiv.appendChild(img);
+
+      passedCell.appendChild(passedDiv);
+      row.appendChild(passedCell);
+
+      table.appendChild(row);
+    }
+
+    return table;
   }
 
 }
