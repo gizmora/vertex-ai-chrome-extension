@@ -1,6 +1,6 @@
 (() => {
   let sidebarVisible = false;
-  const CLIENT_ID = '851787392919-s4c25ms4bau920o2tb1e6cicd01tot0b.apps.googleusercontent.com';
+  const CLIENT_ID = '851787392919-gbida80kl9df7sk7pucn6c2rhu0njqr1.apps.googleusercontent.com';
   const REDIRECT_URI = chrome.identity.getRedirectURL();
   const TOKEN_STORAGE_KEY = 'auth_tokens';
   const DEBUG = false;
@@ -162,7 +162,7 @@
     const tokens = await res.json();
 
     if (tokens.error) {
-      return reject(tokens.error_description || 'Token exchange failed');
+      return (tokens.error_description || 'Token exchange failed');
     }
 
     await chrome.storage.local.set({ [TOKEN_STORAGE_KEY]: {
@@ -170,7 +170,7 @@
       refresh_token: tokens.refresh_token
     }});
 
-    resolve(tokens.id_token);
+    return tokens.id_token;
   }
 
   async function refreshToken(refreshToken) {
