@@ -54,7 +54,7 @@
     }
   },
   "oauth2": {
-    "client_id": "851787392919-s4c25ms4bau920o2tb1e6cicd01tot0b.apps.googleusercontent.com",
+    "client_id": "851787392919-gbida80kl9df7sk7pucn6c2rhu0njqr1.apps.googleusercontent.com",
     "scopes":["openid", "email", "profile"]
   }
 }
