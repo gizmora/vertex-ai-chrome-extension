@@ -1,0 +1,25 @@
+Scraper:
+  ✔ Extract case details @done(25-04-28 15:47)
+  ✔ Click expand thread @done(25-04-28 15:47)
+  ☐ Extract email thread
+  ☐ Detect if case is chat or email
+
+UI:
+  Create layout:
+    ✔ General layout @done(24-12-11 09:59)
+    Home:
+      ✔ (temporary) Text field for case details @done(24-12-11 09:59)
+    ✔ Failed @done(25-02-04 22:37)
+    ✔ Suggestion @done(25-02-04 22:37)
+  ✔ Shadow Dom @done(24-12-11 10:01)
+
+Backend:
+  ✔ Host nodejs server on GCP @done(25-04-05 02:53)
+  ✔ Update system instructions @done(24-12-11 11:11)
+  ☐ Retain information when chrome ext closes
+  ✔ Seggregate files @done(25-05-07 15:55)
+  ☐ Change to PKCE
+
+
+Fix:
+  ✔ Multiple click triggers/ observers @done(25-04-08 00:36)x

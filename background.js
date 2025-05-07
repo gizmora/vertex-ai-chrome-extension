@@ -6,12 +6,12 @@
   const DEBUG = false;
 
   const sendPromptToVertexAI = async function (prompt, cb) {
-    const idToken = await getValidIdToken();
+    // const idToken = await getValidIdToken();
     let url = DEBUG ? 'http://localhost:8080/vertex-ai/api/v1/prompt/default' : 'https://sherlock-demo-851787392919.us-central1.run.app/api/v1/prompt/default';
     const options = {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer ' + idToken,
+        // 'Authorization': 'Bearer ' + idToken,
         'Content-Type': 'application/json'
       }
     }
@@ -229,7 +229,7 @@
     console.log(`From ${sender.tab}: ${sender.url}`);
 
     if (request.action === 'generatePrompt' && request.prompt) {
-      sendToProxy(request.prompt, sendResponse);
+      sendPromptToVertexAI(request.prompt, sendResponse);
       return true;
     }
 
