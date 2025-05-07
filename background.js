@@ -1,6 +1,6 @@
 (() => {
   let sidebarVisible = false;
-  const DEBUG = TRUE;
+  const DEBUG = true;
   const CLIENT_ID = DEBUG ? '851787392919-gbida80kl9df7sk7pucn6c2rhu0njqr1.apps.googleusercontent.com' : '189965926617-0q0hu88kporp7fe0iuo2g0210p3qh7lk.apps.googleusercontent.com';
   const REDIRECT_URI = chrome.identity.getRedirectURL();
   const TOKEN_STORAGE_KEY = 'auth_tokens';
