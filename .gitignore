@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 manifest.json
+manifest.prod.json
+manifest.dev.json
