@@ -38,7 +38,8 @@
   },
   "host_permissions":[
     "http://localhost:8888/*",
-    "https://sherlock-ai-service-189965926617.us-central1.run.app/api/v1/prompt/default"
+    "https://sherlock-demo-851787392919.us-central1.run.app/*",
+    "https://proxy-service-851787392919.us-central1.run.app/*"
   ],
   "permissions": [
     "storage",
@@ -53,7 +54,7 @@
     }
   },
   "oauth2": {
-    "client_id": "189965926617-0q0hu88kporp7fe0iuo2g0210p3qh7lk.apps.googleusercontent.com",
-    "scopes":["openid", "email"]
+    "client_id": "851787392919-gbida80kl9df7sk7pucn6c2rhu0njqr1.apps.googleusercontent.com",
+    "scopes":["openid", "email", "profile"]
   }
 }
