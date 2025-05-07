@@ -1,13 +1,13 @@
 (() => {
   let sidebarVisible = false;
-  const CLIENT_ID = '851787392919-gbida80kl9df7sk7pucn6c2rhu0njqr1.apps.googleusercontent.com';
+  const DEBUG = TRUE;
+  const CLIENT_ID = DEBUG ? '851787392919-gbida80kl9df7sk7pucn6c2rhu0njqr1.apps.googleusercontent.com' : '189965926617-0q0hu88kporp7fe0iuo2g0210p3qh7lk.apps.googleusercontent.com';
   const REDIRECT_URI = chrome.identity.getRedirectURL();
   const TOKEN_STORAGE_KEY = 'auth_tokens';
-  const DEBUG = false;
 
   const sendPromptToVertexAI = async function (prompt, cb) {
     // const idToken = await getValidIdToken();
-    let url = DEBUG ? 'http://localhost:8080/vertex-ai/api/v1/prompt/default' : 'https://sherlock-demo-851787392919.us-central1.run.app/api/v1/prompt/default';
+    let url = DEBUG ? 'https://sherlock-demo-851787392919.us-central1.run.app/api/v1/prompt/default' : 'https://sherlock-ai-service-189965926617.us-central1.run.app/api/v1/prompt/default';
     const options = {
       method: 'POST',
       headers: {
