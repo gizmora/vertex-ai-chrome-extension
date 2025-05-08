@@ -4,10 +4,12 @@ const CASE_SCRAPER = {
   sourceSelector: 'issue-detail-row[debugid="sourceRow"] span[debugid="issue-detail-row-value"',
   formLabelSelector: '.form-label',
   formValueSelector: '[debug-id="html-value"]',
+  activeCaseLogSelector: '.case-log-container.active-case-log-container',
+  chatLogSelector: '.message-header.realtime-chat',
 
-  setCaseLogBtnListener: function(_shadowRoot, extensionState) {
+  setCaseLogBtnListener: function() {
     let _self = this;
-    const extractCaseLogsBtn = _shadowRoot.getElementById('case-logs');
+    const extractCaseLogsBtn = GLOBAL._shadowRoot.getElementById('case-logs');
 
     if (!extractCaseLogsBtn) {
       console.error("Case logs button not found in Shadow DOM");
@@ -15,11 +17,11 @@ const CASE_SCRAPER = {
     }
 
     extractCaseLogsBtn.addEventListener('click', () => {
-      _self.handleCaseLogButtonClick(extensionState);
+      _self.handleCaseLogButtonClick();
     });
   },
 
-  handleCaseLogButtonClick: function(extensionState) {
+  handleCaseLogButtonClick: function() {
     const caseLogButton = document.querySelector('material-button[aria-label="Case log"]');
   
     if (!caseLogButton) {
@@ -27,14 +29,10 @@ const CASE_SCRAPER = {
       return;
     }
   
-    if (!extensionState.isThreadExpanded) {
-      this.expandCaseLogsThread(extensionState);
-    } else {
-      this.extractCaseDetails(extensionState);
-    }
+    this.expandCaseLogsThread();
   },
 
-  expandCaseLogsThread: function(extensionState) {
+  expandCaseLogsThread: function() {
     const caseLogButton = document.querySelector('material-button[aria-label="Case log"]');
     
     caseLogButton.click();
@@ -48,9 +46,21 @@ const CASE_SCRAPER = {
 
             const expandThreadsButton = document.querySelector('material-button[debug-id="collapse-expand-all-button"]');
 
-            if (expandThreadsButton && !extensionState.isThreadExpanded) {
-              expandThreadsButton.click();
-              extensionState.isThreadExpanded = true;
+            if (expandThreadsButton) {
+              const ariaLabel = expandThreadsButton.getAttribute('aria-label');
+              const ariaExpanded = expandThreadsButton.getAttribute('aria-expanded');
+
+              if (ariaLabel === "Expand all messages" && ariaExpanded === "false") {
+                console.log("The thread is currently collapsed.");
+                expandThreadsButton.click();
+                GLOBAL.isThreadExpanded = true;
+              } else if (ariaLabel === "Collapse all messages" && ariaExpanded === "true") {
+                console.log("The thread is currently expanded.");
+                this.extractCaseDetails();
+                this.extractChatLogs();
+              } else {
+                console.log("Could not determine the thread state based on the button's attributes.");
+              }
             }
             
             break;
@@ -62,10 +72,11 @@ const CASE_SCRAPER = {
     observer.observe(document.body, { attributes: true, subtree: true });
   },
 
-  extractCaseDetails: function(extensionState) {
+  extractCaseDetails: function() {
     let _self = this;
     const data = [];
-    const contactUsForm = document.querySelector(_self.contactUsFormSelector);
+    const caseLogMainContainer = document.querySelector(_self.activeCaseLogSelector);
+    const contactUsForm = caseLogMainContainer.querySelector(_self.contactUsFormSelector);
     const formLabels = contactUsForm.querySelectorAll(_self.formLabelSelector);
 
     formLabels.forEach(formLabelElement => {
@@ -83,10 +94,36 @@ const CASE_SCRAPER = {
       
       }
 
-      extensionState.contactUsForm.push({ label: labelText, value: valueText });
+      GLOBAL.contactUsForm.push({ label: labelText, value: valueText });
     });
     
-    console.log(extensionState.contactUsForm);
+    console.log(GLOBAL.contactUsForm);
+  },
+
+  extractChatLogs: async function() {
+    let _self = this;
+    const caseLogMainContainer = document.querySelector(_self.activeCaseLogSelector);
+    const copyChatLogButton = caseLogMainContainer.querySelector('material-button[debug-id="copy-content-button"]');
+
+    if (copyChatLogButton) {
+      copyChatLogButton.click();
+
+      await new Promise(resolve => setTimeout(resolve, 150)); // Tune delay as needed
+
+      // 3. Read clipboard content
+      const text = await navigator.clipboard.readText();
+      const textareaElement = GLOBAL._shadowRoot.querySelector('textarea#case-details');
+
+      if (textareaElement) {
+        textareaElement.value = text;
+        // Optionally, you can trigger an input or change event
+        textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+        textareaElement.dispatchEvent(new Event('change', { bubbles: true }));
+        console.log('Text pasted successfully to the textarea.');
+      }
+      
+      console.log("Sherlock AI Chat log:", text);
+    }
   }
 
 }
