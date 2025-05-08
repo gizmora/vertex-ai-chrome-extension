@@ -1,3 +1,11 @@
+const GLOBAL = {
+  _shadowRoot: null,
+  caseId: '',
+  contactUsForm: [],
+  timeline: [],
+  isThreadExpanded: false,
+};
+
 const UTILS = {
   sendMessage: async function (msg) {
     return new Promise((resolve, reject) => {
@@ -42,5 +50,12 @@ const UTILS = {
 
   checkInputValidity: function (text) {
     return !((text.split(/\s+/).length < 3) || !/\b(is|are|was|were|have|has|had|do|does|did|\w+ing)\b/i.test(text));
+  },
+
+  resetGlobals: function () {
+    GLOBAL.contactUsForm = [];
+    GLOBAL.timeline = [];
+    GLOBAL.caseId = '';
+    GLOBAL.isThreadExpanded = false;
   }
 }

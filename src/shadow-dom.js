@@ -1,6 +1,5 @@
 const SHADOW_DOM = {
   id: 'sherlock-ai',
-  _shadowRoot: null,
   pageTemplate: {
     home: `<div class="case-input">
       <div class="main-heading">Case Details</div>
@@ -33,21 +32,21 @@ const SHADOW_DOM = {
     let sherlock = this.createDiv('sherlock-ai');
     document.body.appendChild(sherlock);
 
-    this._shadowRoot = sherlock.attachShadow({ mode: 'open' });
+    GLOBAL._shadowRoot = sherlock.attachShadow({ mode: 'open' });
   },
 
-  setMessageListener: function (extensionState) {
+  setMessageListener: function () {
     let _self = this;
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.action === 'toggleSidebar') {
-        _self.setSidebar(extensionState);
+        _self.setSidebar();
       }
     });
   },
 
-  setSidebar: async function (extensionState) {
+  setSidebar: async function () {
     let _self = this;
-    const sidebar = _self._shadowRoot.getElementById('chr-sidebar');
+    const sidebar = GLOBAL._shadowRoot.getElementById('chr-sidebar');
 
     if (sidebar) {
       sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
@@ -64,7 +63,7 @@ const SHADOW_DOM = {
       _self.setNavListener();
       _self.loadContent('home');
       _self.setSubmitListener();
-      CASE_SCRAPER.setCaseLogBtnListener(_self._shadowRoot, extensionState);
+      CASE_SCRAPER.setCaseLogBtnListener();
     }
   },
 
@@ -81,7 +80,7 @@ const SHADOW_DOM = {
   setHeaderIcon: async function () {
     let _self = this;
     let iconPath = chrome.runtime.getURL('../assets/images/icon-128.png');
-    let iconContainer = _self._shadowRoot.getElementById('sherlock-icon');
+    let iconContainer = GLOBAL._shadowRoot.getElementById('sherlock-icon');
 
     if (iconContainer) {
       iconContainer.src = iconPath;
@@ -92,7 +91,7 @@ const SHADOW_DOM = {
 
   setNavListener: function () {
     let _self = this;
-    const nav = _self._shadowRoot.querySelector('.nav');
+    const nav = GLOBAL._shadowRoot.querySelector('.nav');
 
     nav.addEventListener('click', (event) => {
       const buttonId = event.target.dataset.navBtnName;
@@ -105,7 +104,7 @@ const SHADOW_DOM = {
 
   loadContent: function(page) {
     let _self = this;
-    const mainContainer = _self._shadowRoot.querySelector(_self.mainContainerSelector);
+    const mainContainer = GLOBAL._shadowRoot.querySelector(_self.mainContainerSelector);
 
     const contentSections = mainContainer.querySelectorAll('.section-content');
     contentSections.forEach(section => {
@@ -126,11 +125,11 @@ const SHADOW_DOM = {
 
   setSubmitListener: function() {
     let _self = this;
-    const submitButton = _self._shadowRoot.getElementById('submit-prompt');
+    const submitButton = GLOBAL._shadowRoot.getElementById('submit-prompt');
 
     if (submitButton) {
       submitButton.addEventListener('click', async () => {
-        const caseDetails = _self._shadowRoot.getElementById('case-details').value;
+        const caseDetails = GLOBAL._shadowRoot.getElementById('case-details').value;
         const isValidInput = UTILS.checkInputValidity(caseDetails);
 
         if (isValidInput) {
@@ -146,13 +145,13 @@ const SHADOW_DOM = {
           }
 
           _self.loadContent('results');
-          const promptResponse = _self._shadowRoot.getElementById('prompt-response');
+          const promptResponse = GLOBAL._shadowRoot.getElementById('prompt-response');
 
           if (promptResponse) {
             promptResponse.style.display = 'block';
           }
           
-          const tableContainer = _self._shadowRoot.getElementById('rules-table');
+          const tableContainer = GLOBAL._shadowRoot.getElementById('rules-table');
 
           if (tableContainer && results.data) {
             const generatedText = results.data;
@@ -171,15 +170,13 @@ const SHADOW_DOM = {
   },
 
   setErrorMsg: function (msg) {
-    let errorLabel = this._shadowRoot.getElementById('error-label');
+    let errorLabel = GLOBAL._shadowRoot.getElementById('error-label');
     errorLabel.textContent = msg;
   },
 
   addChild: function (el) {
-    let _self = this;
-    
-    if (_self._shadowRoot) {
-      _self._shadowRoot.appendChild(el);
+    if (GLOBAL._shadowRoot) {
+      GLOBAL._shadowRoot.appendChild(el);
     } else {
       console.error("Shadow root not initialized");
     }
@@ -188,7 +185,7 @@ const SHADOW_DOM = {
   toggleLoader: function(show) {
     let _self = this;
 
-    const loader = _self._shadowRoot.getElementById('spinner');
+    const loader = GLOBAL._shadowRoot.getElementById('spinner');
 
     if (loader) {
       loader.style.display = show? 'inline-block' : 'none';

@@ -1,14 +1,7 @@
 (() => {
-  const CASE_STATE = {
-    caseId: '',
-    contactUsForm: [],
-    timeline: [],
-    isThreadExpanded: false,
-  }
-
   // initialize SHADOW DOM
   SHADOW_DOM.init();
-  SHADOW_DOM.setMessageListener(CASE_STATE);
+  SHADOW_DOM.setMessageListener();
 
   // Add listener for url change
   window.addEventListener('hashchange', () => {
@@ -16,10 +9,7 @@
     const hashUrl = window.location.hash;
     
     // Reset 
-    CASE_STATE.contactUsForm = [];
-    CASE_STATE.timeline = [];
-    CASE_STATE.caseId = '';
-    CASE_STATE.isThreadExpanded = false;
+    UTILS.resetGlobals();
 
     if (!hashUrl) {
       return null;
@@ -31,9 +21,9 @@
       return null;
     }
   
-    CASE_STATE.caseId = pathPart.substring('/case/'.length).trim();
+    GLOBAL.caseId = pathPart.substring('/case/'.length).trim();
 
-    console.log(`SHERLOCK AI: Case ID is ${CASE_STATE.caseId}`);
+    console.log(`SHERLOCK AI: Case ID is ${GLOBAL.caseId}`);
   });
 
 })();
