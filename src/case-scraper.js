@@ -6,6 +6,7 @@ const CASE_SCRAPER = {
   formValueSelector: '[debug-id="html-value"]',
   activeCaseLogSelector: '.case-log-container.active-case-log-container',
   chatLogSelector: '.message-header.realtime-chat',
+  emailThreadSelector: 'div.message-body.email',
 
   setCaseLogBtnListener: function() {
     let _self = this;
@@ -51,15 +52,28 @@ const CASE_SCRAPER = {
               const ariaExpanded = expandThreadsButton.getAttribute('aria-expanded');
 
               if (ariaLabel === "Expand all messages" && ariaExpanded === "false") {
-                console.log("The thread is currently collapsed.");
                 expandThreadsButton.click();
                 GLOBAL.isThreadExpanded = true;
               } else if (ariaLabel === "Collapse all messages" && ariaExpanded === "true") {
-                console.log("The thread is currently expanded.");
+                let emailThread = document.querySelectorAll(this.emailThreadSelector) ? document.querySelectorAll(this.emailThreadSelector) : [];
                 this.extractCaseDetails();
                 this.extractChatLogs();
+
+                emailThread.forEach((email) => {
+                  let text = this.extractEmailThread(email);
+                  GLOBAL.emailThread += text + '\n';
+                });
+
+                console.log(GLOBAL.emailThread);
+                if (GLOBAL.emailThread !== '') {
+                  const textareaElement = GLOBAL._shadowRoot.querySelector('textarea#case-details');
+
+                  if (textareaElement) {
+                    textareaElement.value = GLOBAL.emailThread;
+                  }
+                }
               } else {
-                console.log("Could not determine the thread state based on the button's attributes.");
+                console.error("Could not determine the thread state based on the button's attributes.");
               }
             }
             
@@ -76,54 +90,92 @@ const CASE_SCRAPER = {
     let _self = this;
     const data = [];
     const caseLogMainContainer = document.querySelector(_self.activeCaseLogSelector);
-    const contactUsForm = caseLogMainContainer.querySelector(_self.contactUsFormSelector);
-    const formLabels = contactUsForm.querySelectorAll(_self.formLabelSelector);
+    GLOBAL.contactUsForm = [];
 
-    formLabels.forEach(formLabelElement => {
-      const labelText = formLabelElement.textContent.trim();
-      let valueText = null;
-
-      const valueWrapper = formLabelElement.nextElementSibling;
-
-      if (valueWrapper) {
-        const fieldValue = valueWrapper.querySelector(_self.formValueSelector);
-
-        if (fieldValue) {
-          valueText = fieldValue.textContent.trim();
+    if (caseLogMainContainer) {
+      const contactUsForm = caseLogMainContainer.querySelector(_self.contactUsFormSelector);
+      const formLabels = (contactUsForm) ? contactUsForm.querySelectorAll(_self.formLabelSelector) : [];
+      formLabels.forEach(formLabelElement => {
+        const labelText = formLabelElement.textContent.trim();
+        let valueText = null;
+  
+        const valueWrapper = formLabelElement.nextElementSibling;
+  
+        if (valueWrapper) {
+          const fieldValue = valueWrapper.querySelector(_self.formValueSelector);
+  
+          if (fieldValue) {
+            valueText = fieldValue.textContent.trim();
+          }
+        
         }
+  
+        GLOBAL.contactUsForm.push({ label: labelText, value: valueText });
+      });
       
-      }
-
-      GLOBAL.contactUsForm.push({ label: labelText, value: valueText });
-    });
-    
-    console.log(GLOBAL.contactUsForm);
+      console.log(GLOBAL.contactUsForm);
+    }
   },
 
   extractChatLogs: async function() {
     let _self = this;
     const caseLogMainContainer = document.querySelector(_self.activeCaseLogSelector);
-    const copyChatLogButton = caseLogMainContainer.querySelector('material-button[debug-id="copy-content-button"]');
 
-    if (copyChatLogButton) {
-      copyChatLogButton.click();
+    if (caseLogMainContainer) {
+      const copyChatLogButton = caseLogMainContainer.querySelector('material-button[debug-id="copy-content-button"]');
 
-      await new Promise(resolve => setTimeout(resolve, 150)); // Tune delay as needed
+      if (copyChatLogButton) {
+        copyChatLogButton.click();
 
-      // 3. Read clipboard content
-      const text = await navigator.clipboard.readText();
-      const textareaElement = GLOBAL._shadowRoot.querySelector('textarea#case-details');
+        await new Promise(resolve => setTimeout(resolve, 150));
+        const text = await navigator.clipboard.readText();
+        const textareaElement = GLOBAL._shadowRoot.querySelector('textarea#case-details');
 
-      if (textareaElement) {
-        textareaElement.value = text;
-        // Optionally, you can trigger an input or change event
-        textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
-        textareaElement.dispatchEvent(new Event('change', { bubbles: true }));
-        console.log('Text pasted successfully to the textarea.');
+        if (textareaElement) {
+          textareaElement.value = text;
+          textareaElement.dispatchEvent(new Event('input', { bubbles: true }));
+          textareaElement.dispatchEvent(new Event('change', { bubbles: true }));
+          console.log('Text pasted successfully to the textarea.');
+        }
+        
+        console.log("Sherlock AI Chat log:", text);
       }
-      
-      console.log("Sherlock AI Chat log:", text);
     }
-  }
+  },
 
+  extractEmailThread: function(emailThreadContainer) {
+    let allText = '';
+  
+    function traverse(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        allText += node.textContent;
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const displayStyle = window.getComputedStyle(node).display;
+        const isBlockLevel = displayStyle === 'block' || displayStyle === 'table' || displayStyle === 'list-item';
+  
+        if (allText.length > 0 && isBlockLevel) {
+          allText += '\n';
+  
+        for (const child of node.childNodes) {
+          traverse(child);
+        }
+  
+        if (isBlockLevel && allText.length > 0 && !allText.endsWith('\n')) {
+          allText += '\n';
+        } else if (displayStyle !== 'inline' && allText.length > 0 && !allText.endsWith(' ')) {
+          allText += ' ';
+        }
+      }
+    }
+
+    traverse(emailThreadContainer);
+
+    
+    let finalText = allText.replace(/\s+/g, ' ').replace(/\n+/g, '\n').trim();
+    return finalText;
+  },
+
+  extractEmailReply: function() {
+    // TODO: scrape email reply
+  }
 }

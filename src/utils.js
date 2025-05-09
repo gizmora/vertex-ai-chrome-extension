@@ -4,6 +4,8 @@ const GLOBAL = {
   contactUsForm: [],
   timeline: [],
   isThreadExpanded: false,
+  emailThread: '',
+  emailReply: ''
 };
 
 const UTILS = {
@@ -57,5 +59,7 @@ const UTILS = {
     GLOBAL.timeline = [];
     GLOBAL.caseId = '';
     GLOBAL.isThreadExpanded = false;
+    GLOBAL.emailThread = '';
+    GLOBAL.emailReply = '';
   }
 }
