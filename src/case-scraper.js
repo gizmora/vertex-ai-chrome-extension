@@ -155,24 +155,25 @@ const CASE_SCRAPER = {
   
         if (allText.length > 0 && isBlockLevel) {
           allText += '\n';
-  
-        for (const child of node.childNodes) {
-          traverse(child);
-        }
-  
-        if (isBlockLevel && allText.length > 0 && !allText.endsWith('\n')) {
-          allText += '\n';
-        } else if (displayStyle !== 'inline' && allText.length > 0 && !allText.endsWith(' ')) {
-          allText += ' ';
+    
+          for (const child of node.childNodes) {
+            traverse(child);
+          }
+    
+          if (isBlockLevel && allText.length > 0 && !allText.endsWith('\n')) {
+            allText += '\n';
+          } else if (displayStyle !== 'inline' && allText.length > 0 && !allText.endsWith(' ')) {
+            allText += ' ';
+          }
         }
       }
+
+      traverse(emailThreadContainer);
+
+      
+      let finalText = allText.replace(/\s+/g, ' ').replace(/\n+/g, '\n').trim();
+      return finalText;
     }
-
-    traverse(emailThreadContainer);
-
-    
-    let finalText = allText.replace(/\s+/g, ' ').replace(/\n+/g, '\n').trim();
-    return finalText;
   },
 
   extractEmailReply: function() {
