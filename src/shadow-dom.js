@@ -17,6 +17,7 @@ const SHADOW_DOM = {
     </div>`,
   },
   mainContainerSelector: '.main-container',
+  resultsData: [],
 
   createDiv: function (id = '') {
     let div = document.createElement('div');
@@ -136,11 +137,11 @@ const SHADOW_DOM = {
           _self.setErrorMsg('');
           _self.toggleLoader(true);
 
-          const results = await UTILS.sendMessage({action: 'generatePrompt', prompt: caseDetails});
+          const response = await UTILS.sendMessage({action: 'generatePrompt', prompt: caseDetails});
           _self.toggleLoader(false);
 
-          if (results.error) {
-            console.error(results.error);
+          if (response.error) {
+            console.error(response.error);
             return;
           }
 
@@ -152,12 +153,15 @@ const SHADOW_DOM = {
           }
           
           const tableContainer = GLOBAL._shadowRoot.getElementById('rules-table');
+          console.log({response})
 
-          if (tableContainer && results.data) {
-            const generatedText = results.data;
-            const myTable = _self.createResultsTable(generatedText.rules);
+          if (tableContainer && response.result) {
+            _self.showScore(response);
+            const generatedText = response.result;
+            console.log(generatedText);
+            const myTable = _self.createResultsTable(generatedText);
             tableContainer.innerHTML = '';
-            tableContainer.appendChild(myTable); 
+            tableContainer.appendChild(myTable);
           }
 
         } else {
@@ -192,14 +196,22 @@ const SHADOW_DOM = {
     }
   },
 
-  createResultsTable: function(rules) {
+  createResultsTable: function(results) {
     let _self = this;
-    _self.resultsData = rules;
+    console.log(results);
+
+    results.failed_parameters.forEach(param => {
+      _self.resultsData.push({rule: param.name, suggestion: param.suggestion, passed: false});
+    });
+
+    results.passed_parameters.forEach(param => {
+      _self.resultsData.push({rule: param.name, passed: true});
+    });
 
     const table = document.createElement('table');
     const headerRow = document.createElement('tr');
 
-    ['Category', 'Rule', 'Status'].forEach(headerText => {
+    ['Parameter', 'Status'].forEach(headerText => {
       const header = document.createElement('th');
       header.textContent = headerText;
       headerRow.appendChild(header);
@@ -210,23 +222,11 @@ const SHADOW_DOM = {
     for (let i=0; i < _self.resultsData.length; i++) {
       const row = document.createElement('tr');
 
-      const categoryCell = document.createElement('td');
-      const categoryDiv = document.createElement('div');
-      categoryDiv.textContent = _self.resultsData[i].category;
-      categoryCell.appendChild(categoryDiv);
-      row.appendChild(categoryCell);
-
       const ruleCell = document.createElement('td');
       let ruleTemplate = `<div>${_self.resultsData[i].rule}</div>`;
 
       if (!_self.resultsData[i].passed) {
-        ruleTemplate += `<div class="suggestion">
-          <div class="sherlock-says-header">
-            <img src="${chrome.runtime.getURL('../assets/images/warning-24px.png')}" alt="Suggestion" class="bulb">
-            <span class="sherlock-says">Why it failed?</span>
-          </div>
-          <div>${_self.resultsData[i].reason ? '"' + _self.resultsData[i].reason + '"' : ''}</div>
-        </div>
+        ruleTemplate += `
         <div class="suggestion">
           <div class="sherlock-says-header">
             <img src="${chrome.runtime.getURL('../assets/images/suggestion-24px.png')}" alt="Suggestion" class="bulb">
@@ -257,6 +257,22 @@ const SHADOW_DOM = {
     }
 
     return table;
+  },
+
+  showScore: function(results) {
+    const promptResponse = GLOBAL._shadowRoot.getElementById('prompt-response');
+    const score = document.createElement('p');
+    const highlights = document.createElement('p');
+    const lowlights = document.createElement('p');
+    const data = results.result;
+
+    score.innerHTML = `<span class="sherlock-says">Score: </span> ${data.passed_count}/${data.failed_count + data.passed_count} ~ ${Math.round(data.score * 100)}%, <span class="sherlock-says">Skipped: </span> ${data.skipped_count}`;
+    highlights.innerHTML = `<span class="sherlock-says">Highlights: </span> ${data.highlights}`;
+    lowlights.innerHTML = `<span class="sherlock-says">Lowlights: </span> ${data.lowlights}`;
+    
+    promptResponse.prepend(highlights);
+    promptResponse.prepend(lowlights);
+    promptResponse.prepend(score);
   }
 
 }

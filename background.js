@@ -35,9 +35,9 @@
       const data = await response.json();
 
       if (data.result) {
-        cb({data: data.result})
+        cb(data)
       } else {
-        cb({data: []})
+        cb({})
       }
     } catch (error) {
       console.error(error);

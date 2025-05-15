@@ -190,7 +190,7 @@ div#error-label {
 } 
 
 div#rules-table {
-  font-size: 11px;
+  font-size: 14px;
 }
 
 div#rules-table table{
@@ -227,7 +227,7 @@ img.bulb {
 span.sherlock-says {
   font-weight: bold;
   font-family: 'Montserrat', serif;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 div.sherlock-says-header {
